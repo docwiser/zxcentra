@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1",
+    "email": "admin@administrator.serve",
+    "name": "Administrator",
+    "password": "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/VcSAg/9u2",
+    "role": "admin",
+    "permissions": [
+      "*"
+    ],
+    "socialLogins": [],
+    "createdAt": "2025-06-20T10:23:23.895Z",
+    "updatedAt": "2025-06-20T10:23:23.895Z"
+  },
+  {
+    "id": "2",
+    "email": "susantpwd@gmail.com",
+    "name": "Susant Swain",
+    "password": "$2a$12$YPf3ztxMxe4BUu6f4f5un.QDurB61VivWdkufDVqe.09Um4eWPkZK",
+    "role": "admin",
+    "permissions": [
+"*"
+    ],
+    "socialLogins": [],
+    "createdAt": "2025-06-20T10:27:48.956Z",
+    "updatedAt": "2025-06-20T10:27:48.956Z"
+  }
+]
