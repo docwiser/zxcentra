@@ -1,23 +1,77 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Carousel } from '@/components/ui/carousel';
-import { CompanyModel } from '@/lib/models/company';
-import { ProductModel } from '@/lib/models/product';
-import { ServiceModel } from '@/lib/models/service';
 import { ArrowRight, Star, Users, Shield, Zap } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
-export default async function Home() {
-  const company = CompanyModel.getSettings() || {
-    name: 'ZXCentra',
-    tagline: 'Innovating Tomorrow\'s Technology Today',
-    description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.'
-  };
-  
-  const products = ProductModel.findAll();
-  const services = ServiceModel.findAll();
+interface Company {
+  name: string;
+  tagline: string;
+  description: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  image: string;
+  features: string[];
+  price: string;
+}
+
+interface Service {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  image: string;
+  deliverables: string[];
+}
+
+export default function Home() {
+  const [company, setCompany] = useState<Company | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [companyRes, productsRes, servicesRes] = await Promise.all([
+          fetch('/api/company/data'),
+          fetch('/api/products'),
+          fetch('/api/services')
+        ]);
+
+        if (companyRes.ok) {
+          const companyData = await companyRes.json();
+          setCompany(companyData);
+        }
+
+        if (productsRes.ok) {
+          const productsData = await productsRes.json();
+          setProducts(productsData);
+        }
+
+        if (servicesRes.ok) {
+          const servicesData = await servicesRes.json();
+          setServices(servicesData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const stats = [
     { label: 'Happy Clients', value: '500+', icon: Users },
@@ -26,6 +80,27 @@ export default async function Home() {
     { label: 'Team Members', value: '50+', icon: Zap },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex flex-col">
+        <section className="relative py-20 lg:py-32 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-blue-950/20 dark:via-background dark:to-blue-950/20">
+          <div className="container mx-auto px-4 text-center">
+            <div className="max-w-4xl mx-auto">
+              <div className="animate-pulse">
+                <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-6"></div>
+                <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-8"></div>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="h-12 bg-gray-200 rounded w-32"></div>
+                  <div className="h-12 bg-gray-200 rounded w-32"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -33,10 +108,10 @@ export default async function Home() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-6">
-              {company.tagline}
+              {company?.tagline || 'Innovating Tomorrow\'s Technology Today'}
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              {company.description}
+              {company?.description || 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
@@ -74,139 +149,143 @@ export default async function Home() {
       </section>
 
       {/* Featured Products Carousel */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Featured Products</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover our cutting-edge solutions designed to transform your business
-            </p>
-          </div>
-          
-          <div className="max-w-6xl mx-auto">
-            <Carousel autoPlay={true} autoPlayInterval={4000} className="h-96">
-              {products.map((product) => {
-                const IconComponent = LucideIcons[product.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
-                
-                return (
-                  <Card key={product.id} className="h-full group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-                      <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
-                        <img 
-                          src={product.image} 
-                          alt={product.name}
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        />
+      {products.length > 0 && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Featured Products</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Discover our cutting-edge solutions designed to transform your business
+              </p>
+            </div>
+            
+            <div className="max-w-6xl mx-auto">
+              <Carousel autoPlay={true} autoPlayInterval={4000} className="h-96">
+                {products.map((product) => {
+                  const IconComponent = LucideIcons[product.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
+                  
+                  return (
+                    <Card key={product.id} className="h-full group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+                        <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="p-8 flex flex-col justify-center">
+                          <div className="flex items-center space-x-3 mb-4">
+                            {IconComponent && <IconComponent className="h-8 w-8 text-primary" />}
+                            <h3 className="text-2xl font-bold">{product.name}</h3>
+                          </div>
+                          <p className="text-muted-foreground mb-6 text-lg">
+                            {product.description}
+                          </p>
+                          <div className="flex flex-wrap gap-2 mb-6">
+                            {product.features.slice(0, 3).map((feature, index) => (
+                              <Badge key={index} variant="secondary">
+                                {feature}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-3xl font-bold text-primary">{product.price}</span>
+                            <Button asChild>
+                              <Link href={`/products/${product.id}`}>
+                                Learn More
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="p-8 flex flex-col justify-center">
-                        <div className="flex items-center space-x-3 mb-4">
-                          {IconComponent && <IconComponent className="h-8 w-8 text-primary" />}
-                          <h3 className="text-2xl font-bold">{product.name}</h3>
+                    </Card>
+                  );
+                })}
+              </Carousel>
+            </div>
+            
+            <div className="text-center mt-12">
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/products">
+                  View All Products
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Services Carousel */}
+      {services.length > 0 && (
+        <section className="py-20 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Services</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Professional services to accelerate your digital transformation journey
+              </p>
+            </div>
+            
+            <div className="max-w-6xl mx-auto">
+              <Carousel autoPlay={true} autoPlayInterval={5000} className="h-80">
+                {services.map((service) => {
+                  const IconComponent = LucideIcons[service.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
+                  
+                  return (
+                    <Card key={service.id} className="h-full hover:shadow-lg transition-shadow duration-300">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+                        <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
+                          <img 
+                            src={service.image} 
+                            alt={service.name}
+                            className="object-cover w-full h-full"
+                          />
                         </div>
-                        <p className="text-muted-foreground mb-6 text-lg">
-                          {product.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {product.features.slice(0, 3).map((feature, index) => (
-                            <Badge key={index} variant="secondary">
-                              {feature}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-3xl font-bold text-primary">{product.price}</span>
+                        <div className="p-8 flex flex-col justify-center">
+                          <div className="flex items-center space-x-3 mb-4">
+                            {IconComponent && <IconComponent className="h-8 w-8 text-primary" />}
+                            <h3 className="text-2xl font-bold">{service.name}</h3>
+                          </div>
+                          <p className="text-muted-foreground mb-6 text-lg">
+                            {service.description}
+                          </p>
+                          <div className="space-y-2 mb-6">
+                            <h4 className="font-semibold">Deliverables:</h4>
+                            <ul className="space-y-1">
+                              {service.deliverables.slice(0, 3).map((deliverable, index) => (
+                                <li key={index} className="text-sm text-muted-foreground flex items-center">
+                                  <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2 flex-shrink-0" />
+                                  {deliverable}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                           <Button asChild>
-                            <Link href={`/products/${product.id}`}>
+                            <Link href={`/services/${service.id}`}>
                               Learn More
                             </Link>
                           </Button>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </Carousel>
+                    </Card>
+                  );
+                })}
+              </Carousel>
+            </div>
+            
+            <div className="text-center mt-12">
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/services">
+                  View All Services
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
-          
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/products">
-                View All Products
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Carousel */}
-      <section className="py-20 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Services</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Professional services to accelerate your digital transformation journey
-            </p>
-          </div>
-          
-          <div className="max-w-6xl mx-auto">
-            <Carousel autoPlay={true} autoPlayInterval={5000} className="h-80">
-              {services.map((service) => {
-                const IconComponent = LucideIcons[service.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
-                
-                return (
-                  <Card key={service.id} className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-                      <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
-                        <img 
-                          src={service.image} 
-                          alt={service.name}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      <div className="p-8 flex flex-col justify-center">
-                        <div className="flex items-center space-x-3 mb-4">
-                          {IconComponent && <IconComponent className="h-8 w-8 text-primary" />}
-                          <h3 className="text-2xl font-bold">{service.name}</h3>
-                        </div>
-                        <p className="text-muted-foreground mb-6 text-lg">
-                          {service.description}
-                        </p>
-                        <div className="space-y-2 mb-6">
-                          <h4 className="font-semibold">Deliverables:</h4>
-                          <ul className="space-y-1">
-                            {service.deliverables.slice(0, 3).map((deliverable, index) => (
-                              <li key={index} className="text-sm text-muted-foreground flex items-center">
-                                <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2 flex-shrink-0" />
-                                {deliverable}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <Button asChild>
-                          <Link href={`/services/${service.id}`}>
-                            Learn More
-                          </Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </Carousel>
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/services">
-                View All Services
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-20 bg-primary text-primary-foreground">

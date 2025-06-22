@@ -1,13 +1,25 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ProductModel } from '@/lib/models/product';
 import { ArrowLeft, Check, Star } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  image: string;
+  features: string[];
+  price: string;
+  category: string;
+}
 
 interface ProductPageProps {
   params: {
@@ -15,25 +27,53 @@ interface ProductPageProps {
   };
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = ProductModel.findById(parseInt(params.id));
-  
-  if (!product) {
-    return {
-      title: 'Product Not Found',
+export default function ProductPage({ params }: ProductPageProps) {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFoundError, setNotFoundError] = useState(false);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/products/${params.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProduct(data);
+        } else if (response.status === 404) {
+          setNotFoundError(true);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        setNotFoundError(true);
+      } finally {
+        setLoading(false);
+      }
     };
+
+    fetchProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-32 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="aspect-video bg-gray-200 rounded-lg"></div>
+              <div className="space-y-6">
+                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  return {
-    title: product.name,
-    description: product.description,
-  };
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = ProductModel.findById(parseInt(params.id));
-
-  if (!product) {
+  if (notFoundError || !product) {
     notFound();
   }
 

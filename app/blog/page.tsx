@@ -1,19 +1,73 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { BlogModel } from '@/lib/models/blog';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Stay updated with the latest insights, trends, and innovations in technology and digital transformation.',
-};
+interface BlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  image: string;
+  author_name: string;
+  category: string;
+  read_time: string;
+  created_at: string;
+}
+
+interface BlogCategory {
+  id: number;
+  name: string;
+}
 
 export default function BlogPage() {
-  const blogPosts = BlogModel.findAllPublished();
-  const categories = BlogModel.findCategories();
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [postsRes, categoriesRes] = await Promise.all([
+          fetch('/api/blog'),
+          fetch('/api/blog/categories')
+        ]);
+
+        if (postsRes.ok) {
+          const postsData = await postsRes.json();
+          setBlogPosts(postsData);
+        }
+
+        if (categoriesRes.ok) {
+          const categoriesData = await categoriesRes.json();
+          setCategories(categoriesData);
+        }
+      } catch (error) {
+        console.error('Error fetching blog data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <div className="animate-pulse">
+            <div className="h-12 bg-gray-200 rounded w-64 mx-auto mb-6"></div>
+            <div className="h-6 bg-gray-200 rounded w-96 mx-auto"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const featuredPost = blogPosts[0];
   const otherPosts = blogPosts.slice(1);

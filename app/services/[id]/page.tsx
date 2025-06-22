@@ -1,13 +1,24 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ServiceModel } from '@/lib/models/service';
 import { ArrowLeft, Check, Clock, Users, Award } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
+
+interface Service {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+  image: string;
+  deliverables: string[];
+  category: string;
+}
 
 interface ServicePageProps {
   params: {
@@ -15,25 +26,53 @@ interface ServicePageProps {
   };
 }
 
-export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
-  const service = ServiceModel.findById(parseInt(params.id));
-  
-  if (!service) {
-    return {
-      title: 'Service Not Found',
+export default function ServicePage({ params }: ServicePageProps) {
+  const [service, setService] = useState<Service | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFoundError, setNotFoundError] = useState(false);
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await fetch(`/api/services/${params.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setService(data);
+        } else if (response.status === 404) {
+          setNotFoundError(true);
+        }
+      } catch (error) {
+        console.error('Error fetching service:', error);
+        setNotFoundError(true);
+      } finally {
+        setLoading(false);
+      }
     };
+
+    fetchService();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-32 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="aspect-video bg-gray-200 rounded-lg"></div>
+              <div className="space-y-6">
+                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  return {
-    title: service.name,
-    description: service.description,
-  };
-}
-
-export default function ServicePage({ params }: ServicePageProps) {
-  const service = ServiceModel.findById(parseInt(params.id));
-
-  if (!service) {
+  if (notFoundError || !service) {
     notFound();
   }
 

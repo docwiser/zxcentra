@@ -1,18 +1,48 @@
 'use client';
 
-import type { Metadata } from 'next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getCompanyData } from '@/lib/company';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+
+interface CompanyData {
+  name: string;
+  email: string;
+  phone: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
+}
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const company = getCompanyData();
+  const [company, setCompany] = useState<CompanyData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCompanyData = async () => {
+      try {
+        const response = await fetch('/api/company/data');
+        if (response.ok) {
+          const data = await response.json();
+          setCompany(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch company data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanyData();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,6 +54,36 @@ export default function ContactPage() {
     setIsSubmitting(false);
     setSubmitted(true);
   };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!company) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6">Get In Touch</h1>
+            <p className="text-xl text-muted-foreground">
+              Ready to transform your business? We'd love to hear from you.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const contactInfo = [
     {

@@ -1,4 +1,4 @@
-import { createClient } from '@libsql/client';
+import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 
@@ -10,16 +10,14 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Create libsql client for local file database
-const db = createClient({
-  url: `file:${dbPath}`
-});
+// Create database connection
+const db = new Database(dbPath);
 
 // Initialize database schema
-export async function initializeDatabase() {
+export function initializeDatabase() {
   try {
     // Users table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE NOT NULL,
@@ -35,7 +33,7 @@ export async function initializeDatabase() {
     `);
 
     // Company settings table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS company_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -62,7 +60,7 @@ export async function initializeDatabase() {
     `);
 
     // Products table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -79,7 +77,7 @@ export async function initializeDatabase() {
     `);
 
     // Services table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS services (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -95,7 +93,7 @@ export async function initializeDatabase() {
     `);
 
     // Blog posts table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS blog_posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -115,24 +113,13 @@ export async function initializeDatabase() {
     `);
 
     // Blog categories table
-    await db.execute(`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS blog_categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE NOT NULL,
         slug TEXT UNIQUE NOT NULL,
         description TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    // Site settings table
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS site_settings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        key TEXT UNIQUE NOT NULL,
-        value TEXT,
-        type TEXT DEFAULT 'string',
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
@@ -143,33 +130,4 @@ export async function initializeDatabase() {
   }
 }
 
-// Helper functions to maintain compatibility with better-sqlite3 API
-export const database = {
-  prepare: (sql: string) => {
-    return {
-      run: async (...params: any[]) => {
-        const result = await db.execute({ sql, args: params });
-        return {
-          changes: result.rowsAffected,
-          lastInsertRowid: result.lastInsertRowid
-        };
-      },
-      get: async (...params: any[]) => {
-        const result = await db.execute({ sql, args: params });
-        return result.rows[0] || null;
-      },
-      all: async (...params: any[]) => {
-        const result = await db.execute({ sql, args: params });
-        return result.rows;
-      }
-    };
-  },
-  exec: async (sql: string) => {
-    await db.execute(sql);
-  },
-  pragma: async (pragma: string) => {
-    await db.execute(`PRAGMA ${pragma}`);
-  }
-};
-
-export default database;
+export default db;
