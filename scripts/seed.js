@@ -1,240 +1,223 @@
-const Database = require('better-sqlite3');
-const bcrypt = require('bcryptjs');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const bcrypt = require('bcryptjs');
 
-const dbPath = path.join(process.cwd(), 'data', 'database.db');
-if (!fs.existsSync(path.dirname(dbPath))) fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+const dataDir = path.join(process.cwd(), 'data');
+const dbFile = path.join(dataDir, 'database.json');
 
-const db = new Database(dbPath);
-const now = () => new Date().toISOString();
-
-function createTables() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT,
-      password TEXT,
-      role TEXT DEFAULT 'user',
-      permissions TEXT DEFAULT '[]',
-      social_logins TEXT DEFAULT '[]',
-      avatar TEXT,
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS company_settings (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      tagline TEXT,
-      description TEXT,
-      logo TEXT,
-      website TEXT,
-      email TEXT,
-      phone TEXT,
-      address_street TEXT,
-      address_city TEXT,
-      address_state TEXT,
-      address_zip TEXT,
-      address_country TEXT,
-      social_github TEXT,
-      social_linkedin TEXT,
-      social_twitter TEXT,
-      social_facebook TEXT,
-      social_instagram TEXT,
-      social_youtube TEXT,
-      founded TEXT,
-      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS products (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      description TEXT,
-      icon TEXT,
-      image TEXT,
-      features TEXT,
-      price TEXT,
-      category TEXT,
-      status TEXT DEFAULT 'active',
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS services (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      description TEXT,
-      icon TEXT,
-      image TEXT,
-      deliverables TEXT,
-      category TEXT,
-      status TEXT DEFAULT 'active',
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS blog_categories (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      slug TEXT,
-      description TEXT,
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS blog_posts (
-      id INTEGER PRIMARY KEY,
-      title TEXT,
-      slug TEXT,
-      excerpt TEXT,
-      content TEXT,
-      image TEXT,
-      author_id INTEGER,
-      category TEXT,
-      tags TEXT,
-      status TEXT DEFAULT 'draft',
-      read_time TEXT,
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
+// Ensure data directory exists
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
 }
 
 async function seed() {
   try {
-    createTables();
-
+    const now = new Date().toISOString();
     const adminPassword = await bcrypt.hash('Admin@1122', 12);
-    db.prepare(`INSERT OR REPLACE INTO users (id, email, name, password, role, permissions, social_logins, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-      .run(
-        1,
-        'admin@administrator.serve',
-        'Administrator',
-        adminPassword,
-        'admin',
-        JSON.stringify(['*']),
-        JSON.stringify([]),
-        now(),
-        now()
-      );
 
-    db.prepare(`INSERT OR REPLACE INTO company_settings (
-      id, name, tagline, description, logo, website, email, phone,
-      address_street, address_city, address_state, address_zip, address_country,
-      social_github, social_linkedin, social_twitter, social_facebook, social_instagram, social_youtube,
-      founded, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      1,
-      'ZXCentra',
-      'Innovating Tomorrow\'s Technology Today',
-      'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
-      'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
-      'https://zxcentra.com',
-      'contact@zxcentra.com',
-      '+1 (555) 123-4567',
-      '123 Innovation Drive',
-      'San Francisco',
-      'CA',
-      '94105',
-      'USA',
-      'https://github.com/zxcentra',
-      'https://linkedin.com/company/zxcentra',
-      'https://twitter.com/techflow_sol',
-      'https://facebook.com/zxcentra',
-      'https://instagram.com/zxcentra',
-      'https://youtube.com/c/zxcentra',
-      '2025',
-      now()
-    );
+    const initialData = {
+      users: [
+        {
+          id: 1,
+          email: 'admin@administrator.serve',
+          name: 'Administrator',
+          password: adminPassword,
+          role: 'admin',
+          permissions: ['*'],
+          social_logins: [],
+          avatar: null,
+          created_at: now,
+          updated_at: now
+        }
+      ],
+      company_settings: [
+        {
+          id: 1,
+          name: 'ZXCentra',
+          tagline: 'Innovating Tomorrow\'s Technology Today',
+          description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
+          logo: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+          website: 'https://zxcentra.com',
+          email: 'contact@zxcentra.com',
+          phone: '+1 (555) 123-4567',
+          address_street: '123 Innovation Drive',
+          address_city: 'San Francisco',
+          address_state: 'CA',
+          address_zip: '94105',
+          address_country: 'USA',
+          social_github: 'https://github.com/zxcentra',
+          social_linkedin: 'https://linkedin.com/company/zxcentra',
+          social_twitter: 'https://twitter.com/techflow_sol',
+          social_facebook: 'https://facebook.com/zxcentra',
+          social_instagram: 'https://instagram.com/zxcentra',
+          social_youtube: 'https://youtube.com/c/zxcentra',
+          founded: '2025',
+          updated_at: now
+        }
+      ],
+      products: [
+        {
+          id: 1,
+          name: 'CloudSync Pro',
+          description: 'Enterprise-grade cloud synchronization platform that seamlessly integrates with your existing infrastructure. Boost productivity with real-time collaboration and advanced security features.',
+          icon: 'Cloud',
+          image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
+          features: ['Real-time synchronization', 'Enterprise security', 'API integration', '24/7 support', 'Multi-platform compatibility'],
+          price: '$99/month',
+          category: 'Cloud Solutions',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 2,
+          name: 'DataFlow Analytics',
+          description: 'Advanced analytics platform with AI-powered insights that transform your data into actionable business intelligence. Make data-driven decisions with confidence.',
+          icon: 'BarChart3',
+          image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
+          features: ['AI-powered insights', 'Custom dashboards', 'Real-time monitoring', 'Export tools', 'Predictive analytics'],
+          price: '$149/month',
+          category: 'Analytics',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 3,
+          name: 'SecureVault Enterprise',
+          description: 'Military-grade security solution for enterprise data protection. Safeguard your sensitive information with advanced encryption and access controls.',
+          icon: 'Shield',
+          image: 'https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=800',
+          features: ['Military-grade encryption', 'Access controls', 'Audit trails', 'Compliance reporting', 'Zero-trust architecture'],
+          price: '$199/month',
+          category: 'Security',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        }
+      ],
+      services: [
+        {
+          id: 1,
+          name: 'Digital Transformation Consulting',
+          description: 'Comprehensive digital transformation services to modernize your business operations and improve efficiency. Our experts guide you through every step of your digital journey.',
+          icon: 'Zap',
+          image: 'https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Digital strategy consultation', 'Technology audit and assessment', 'Implementation roadmap', 'Change management support', 'Training and knowledge transfer'],
+          category: 'Consulting',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 2,
+          name: 'Cloud Migration Services',
+          description: 'Seamless cloud migration services that minimize downtime and maximize performance. Move your infrastructure to the cloud with confidence and expert support.',
+          icon: 'CloudUpload',
+          image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Migration assessment', 'Cloud architecture design', 'Data migration', 'Application modernization', 'Post-migration optimization'],
+          category: 'Cloud Services',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 3,
+          name: 'Custom Software Development',
+          description: 'Tailored software solutions built to meet your unique business requirements. From concept to deployment, we deliver high-quality applications that drive results.',
+          icon: 'Code',
+          image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Requirements analysis', 'Custom application development', 'Quality assurance testing', 'Deployment and integration', 'Ongoing maintenance and support'],
+          category: 'Development',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        }
+      ],
+      blog_categories: [
+        {
+          id: 1,
+          name: 'Cloud Computing',
+          slug: 'cloud-computing',
+          description: 'Latest trends and insights in cloud technology',
+          created_at: now
+        },
+        {
+          id: 2,
+          name: 'Cybersecurity',
+          slug: 'cybersecurity',
+          description: 'Security best practices and threat intelligence',
+          created_at: now
+        },
+        {
+          id: 3,
+          name: 'Digital Transformation',
+          slug: 'digital-transformation',
+          description: 'Strategies for successful digital transformation',
+          created_at: now
+        },
+        {
+          id: 4,
+          name: 'AI & Machine Learning',
+          slug: 'ai-machine-learning',
+          description: 'Artificial intelligence and machine learning insights',
+          created_at: now
+        }
+      ],
+      blog_posts: [
+        {
+          id: 1,
+          title: 'The Future of Cloud Computing in 2025',
+          slug: 'future-cloud-computing-2025',
+          excerpt: 'Explore the emerging trends and technologies that will shape cloud computing in 2025 and beyond.',
+          content: '<h2>The Evolution of Cloud Technology</h2><p>Cloud computing continues to evolve at a rapid pace, with new innovations emerging every year. In 2025, we expect to see significant advancements in edge computing, serverless architectures, and AI-driven cloud services.</p><h3>Key Trends to Watch</h3><ul><li>Edge computing integration</li><li>Serverless-first architectures</li><li>AI-powered cloud optimization</li><li>Enhanced security measures</li></ul><p>Organizations that embrace these trends will gain a competitive advantage in the digital marketplace.</p>',
+          image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
+          author_id: 1,
+          category: 'Cloud Computing',
+          tags: ['cloud', 'trends', '2025', 'technology'],
+          status: 'published',
+          read_time: '5 min read',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 2,
+          title: 'Cybersecurity Best Practices for Remote Teams',
+          slug: 'cybersecurity-best-practices-remote-teams',
+          excerpt: 'Essential security measures to protect your organization when employees work from anywhere.',
+          content: '<h2>Securing the Remote Workforce</h2><p>With remote work becoming the norm, organizations must adapt their cybersecurity strategies to protect distributed teams and assets.</p><h3>Essential Security Measures</h3><ul><li>Multi-factor authentication</li><li>VPN implementation</li><li>Regular security training</li><li>Endpoint protection</li></ul><p>A comprehensive security strategy is crucial for maintaining business continuity in a remote work environment.</p>',
+          image: 'https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=800',
+          author_id: 1,
+          category: 'Cybersecurity',
+          tags: ['security', 'remote-work', 'best-practices'],
+          status: 'published',
+          read_time: '7 min read',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 3,
+          title: 'Digital Transformation: A Strategic Approach',
+          slug: 'digital-transformation-strategic-approach',
+          excerpt: 'Learn how to develop and execute a successful digital transformation strategy for your organization.',
+          content: '<h2>Building a Digital-First Organization</h2><p>Digital transformation is more than just adopting new technologies—it\'s about fundamentally changing how your organization operates and delivers value to customers.</p><h3>Key Success Factors</h3><ul><li>Leadership commitment</li><li>Cultural change management</li><li>Technology integration</li><li>Continuous improvement</li></ul><p>Organizations that approach digital transformation strategically are more likely to achieve lasting success.</p>',
+          image: 'https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=800',
+          author_id: 1,
+          category: 'Digital Transformation',
+          tags: ['digital-transformation', 'strategy', 'business'],
+          status: 'published',
+          read_time: '6 min read',
+          created_at: now,
+          updated_at: now
+        }
+      ]
+    };
 
-    const insertProduct = db.prepare(`INSERT OR REPLACE INTO products
-      (id, name, description, icon, image, features, price, category, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-    const products = [
-      {
-        id: 1,
-        name: 'CloudSync Pro',
-        description: 'Enterprise-grade cloud synchronization platform...',
-        icon: 'Cloud',
-        image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg',
-        features: ['Real-time sync', 'Enterprise security', 'API integration', '24/7 support'],
-        price: '$99/month',
-        category: 'Cloud Solutions',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'DataFlow Analytics',
-        description: 'Advanced analytics platform with AI-powered insights.',
-        icon: 'BarChart3',
-        image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg',
-        features: ['AI insights', 'Custom dashboards', 'Real-time monitoring', 'Export tools'],
-        price: '$149/month',
-        category: 'Analytics',
-        status: 'active'
-      }
-    ];
-    products.forEach(p =>
-      insertProduct.run(p.id, p.name, p.description, p.icon, p.image, JSON.stringify(p.features), p.price, p.category, p.status, now(), now())
-    );
-
-    const insertService = db.prepare(`INSERT OR REPLACE INTO services
-      (id, name, description, icon, image, deliverables, category, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-    const services = [
-      {
-        id: 1,
-        name: 'Digital Transformation',
-        description: 'Modernize operations and improve efficiency.',
-        icon: 'Zap',
-        image: 'https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg',
-        deliverables: ['Strategy consultation', 'Technology audit', 'Implementation plan', 'Training & support'],
-        category: 'Consulting',
-        status: 'active'
-      }
-    ];
-    services.forEach(s =>
-      insertService.run(s.id, s.name, s.description, s.icon, s.image, JSON.stringify(s.deliverables), s.category, s.status, now(), now())
-    );
-
-    const insertCategory = db.prepare(`INSERT OR REPLACE INTO blog_categories (id, name, slug, description, created_at)
-                                       VALUES (?, ?, ?, ?, ?)`);
-    const blogCategories = [
-      { id: 1, name: 'Cloud Computing', slug: 'cloud-computing', description: 'Latest in cloud tech' },
-      { id: 2, name: 'Security', slug: 'security', description: 'Cybersecurity best practices' }
-    ];
-    blogCategories.forEach(c => insertCategory.run(c.id, c.name, c.slug, c.description, now()));
-
-    const insertPost = db.prepare(`INSERT OR REPLACE INTO blog_posts
-      (id, title, slug, excerpt, content, image, author_id, category, tags, status, read_time, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-    const blogPosts = [
-      {
-        id: 1,
-        title: 'The Future of Cloud Computing',
-        slug: 'future-cloud-computing',
-        excerpt: 'Explore trends shaping cloud in 2024',
-        content: '<h2>Cloud Outlook</h2><p>Cloud evolves fast...</p>',
-        image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg',
-        author_id: 1,
-        category: 'Cloud Computing',
-        tags: ['cloud', 'trends', '2024'],
-        status: 'published',
-        read_time: '5 min read'
-      }
-    ];
-    blogPosts.forEach(p =>
-      insertPost.run(p.id, p.title, p.slug, p.excerpt, p.content, p.image, p.author_id, p.category, JSON.stringify(p.tags), p.status, p.read_time, now(), now())
-    );
-
-    console.log('✅ Database seeded successfully.');
-  } catch (err) {
-    console.error('❌ Error seeding database:', err);
-  } finally {
-    db.close();
+    fs.writeFileSync(dbFile, JSON.stringify(initialData, null, 2));
+    console.log('✅ Database seeded successfully with JSON data.');
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    process.exit(1);
   }
 }
 

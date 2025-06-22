@@ -1,4 +1,4 @@
-import db from '../database';
+import db from '../database/json-db';
 import bcrypt from 'bcryptjs';
 
 export interface User {
@@ -16,108 +16,36 @@ export interface User {
 
 export class UserModel {
   static findByEmail(email: string): User | undefined {
-    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const user = stmt.get(email) as any;
-    
-    if (user) {
-      return {
-        ...user,
-        permissions: JSON.parse(user.permissions || '[]'),
-        social_logins: JSON.parse(user.social_logins || '[]')
-      };
-    }
-    
-    return undefined;
+    return db.findOne<User>('users', { email });
   }
 
   static findById(id: number): User | undefined {
-    const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
-    const user = stmt.get(id) as any;
-    
-    if (user) {
-      return {
-        ...user,
-        permissions: JSON.parse(user.permissions || '[]'),
-        social_logins: JSON.parse(user.social_logins || '[]')
-      };
-    }
-    
-    return undefined;
+    return db.findById<User>('users', id);
   }
 
   static async create(userData: Partial<User>): Promise<User> {
-    const hashedPassword = userData.password ? await bcrypt.hash(userData.password, 12) : null;
+    const hashedPassword = userData.password ? await bcrypt.hash(userData.password, 12) : undefined;
     
-    const stmt = db.prepare(`
-      INSERT INTO users (email, name, password, role, permissions, social_logins, avatar)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
-    
-    const result = stmt.run(
-      userData.email,
-      userData.name,
-      hashedPassword,
-      userData.role || 'user',
-      JSON.stringify(userData.permissions || ['profile:read', 'profile:write']),
-      JSON.stringify(userData.social_logins || []),
-      userData.avatar
-    );
+    const newUser = {
+      ...userData,
+      password: hashedPassword,
+      role: userData.role || 'user',
+      permissions: userData.permissions || ['profile:read', 'profile:write'],
+      social_logins: userData.social_logins || []
+    };
 
-    return this.findById(result.lastInsertRowid as number)!;
+    return db.create<User>('users', newUser);
   }
 
   static update(id: number, updates: Partial<User>): User | null {
-    const fields = [];
-    const values = [];
-
-    if (updates.name) {
-      fields.push('name = ?');
-      values.push(updates.name);
-    }
-    if (updates.email) {
-      fields.push('email = ?');
-      values.push(updates.email);
-    }
-    if (updates.password) {
-      fields.push('password = ?');
-      values.push(updates.password);
-    }
-    if (updates.role) {
-      fields.push('role = ?');
-      values.push(updates.role);
-    }
-    if (updates.permissions) {
-      fields.push('permissions = ?');
-      values.push(JSON.stringify(updates.permissions));
-    }
-    if (updates.avatar) {
-      fields.push('avatar = ?');
-      values.push(updates.avatar);
-    }
-
-    fields.push('updated_at = CURRENT_TIMESTAMP');
-    values.push(id);
-
-    const stmt = db.prepare(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`);
-    stmt.run(...values);
-
-    return this.findById(id);
+    return db.update<User>('users', id, updates);
   }
 
   static delete(id: number): boolean {
-    const stmt = db.prepare('DELETE FROM users WHERE id = ?');
-    const result = stmt.run(id);
-    return result.changes > 0;
+    return db.delete('users', id);
   }
 
   static findAll(): User[] {
-    const stmt = db.prepare('SELECT * FROM users ORDER BY created_at DESC');
-    const users = stmt.all() as any[];
-    
-    return users.map(user => ({
-      ...user,
-      permissions: JSON.parse(user.permissions || '[]'),
-      social_logins: JSON.parse(user.social_logins || '[]')
-    }));
+    return db.findAll<User>('users');
   }
 }

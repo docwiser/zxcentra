@@ -1,0 +1,248 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@administrator.serve",
+      "name": "Administrator",
+      "password": "$2a$12$ANAh0bde8CmqyT.HMROjW.xaBif57eD3M6CZ6HNf/6JDo7fbScdBC",
+      "role": "admin",
+      "permissions": [
+        "*"
+      ],
+      "social_logins": [],
+      "avatar": null,
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    }
+  ],
+  "company_settings": [
+    {
+      "id": 1,
+      "name": "ZXCentra",
+      "tagline": "Innovating Tomorrow's Technology Today",
+      "description": "Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.",
+      "logo": "https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2",
+      "website": "https://zxcentra.com",
+      "email": "contact@zxcentra.com",
+      "phone": "+1 (555) 123-4567",
+      "address_street": "123 Innovation Drive",
+      "address_city": "San Francisco",
+      "address_state": "CA",
+      "address_zip": "94105",
+      "address_country": "USA",
+      "social_github": "https://github.com/zxcentra",
+      "social_linkedin": "https://linkedin.com/company/zxcentra",
+      "social_twitter": "https://twitter.com/techflow_sol",
+      "social_facebook": "https://facebook.com/zxcentra",
+      "social_instagram": "https://instagram.com/zxcentra",
+      "social_youtube": "https://youtube.com/c/zxcentra",
+      "founded": "2025",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "CloudSync Pro",
+      "description": "Enterprise-grade cloud synchronization platform that seamlessly integrates with your existing infrastructure. Boost productivity with real-time collaboration and advanced security features.",
+      "icon": "Cloud",
+      "image": "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "features": [
+        "Real-time synchronization",
+        "Enterprise security",
+        "API integration",
+        "24/7 support",
+        "Multi-platform compatibility"
+      ],
+      "price": "$99/month",
+      "category": "Cloud Solutions",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 2,
+      "name": "DataFlow Analytics",
+      "description": "Advanced analytics platform with AI-powered insights that transform your data into actionable business intelligence. Make data-driven decisions with confidence.",
+      "icon": "BarChart3",
+      "image": "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "features": [
+        "AI-powered insights",
+        "Custom dashboards",
+        "Real-time monitoring",
+        "Export tools",
+        "Predictive analytics"
+      ],
+      "price": "$149/month",
+      "category": "Analytics",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 3,
+      "name": "SecureVault Enterprise",
+      "description": "Military-grade security solution for enterprise data protection. Safeguard your sensitive information with advanced encryption and access controls.",
+      "icon": "Shield",
+      "image": "https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "features": [
+        "Military-grade encryption",
+        "Access controls",
+        "Audit trails",
+        "Compliance reporting",
+        "Zero-trust architecture"
+      ],
+      "price": "$199/month",
+      "category": "Security",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "name": "Digital Transformation Consulting",
+      "description": "Comprehensive digital transformation services to modernize your business operations and improve efficiency. Our experts guide you through every step of your digital journey.",
+      "icon": "Zap",
+      "image": "https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "deliverables": [
+        "Digital strategy consultation",
+        "Technology audit and assessment",
+        "Implementation roadmap",
+        "Change management support",
+        "Training and knowledge transfer"
+      ],
+      "category": "Consulting",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 2,
+      "name": "Cloud Migration Services",
+      "description": "Seamless cloud migration services that minimize downtime and maximize performance. Move your infrastructure to the cloud with confidence and expert support.",
+      "icon": "CloudUpload",
+      "image": "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "deliverables": [
+        "Migration assessment",
+        "Cloud architecture design",
+        "Data migration",
+        "Application modernization",
+        "Post-migration optimization"
+      ],
+      "category": "Cloud Services",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 3,
+      "name": "Custom Software Development",
+      "description": "Tailored software solutions built to meet your unique business requirements. From concept to deployment, we deliver high-quality applications that drive results.",
+      "icon": "Code",
+      "image": "https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "deliverables": [
+        "Requirements analysis",
+        "Custom application development",
+        "Quality assurance testing",
+        "Deployment and integration",
+        "Ongoing maintenance and support"
+      ],
+      "category": "Development",
+      "status": "active",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    }
+  ],
+  "blog_categories": [
+    {
+      "id": 1,
+      "name": "Cloud Computing",
+      "slug": "cloud-computing",
+      "description": "Latest trends and insights in cloud technology",
+      "created_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 2,
+      "name": "Cybersecurity",
+      "slug": "cybersecurity",
+      "description": "Security best practices and threat intelligence",
+      "created_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 3,
+      "name": "Digital Transformation",
+      "slug": "digital-transformation",
+      "description": "Strategies for successful digital transformation",
+      "created_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 4,
+      "name": "AI & Machine Learning",
+      "slug": "ai-machine-learning",
+      "description": "Artificial intelligence and machine learning insights",
+      "created_at": "2025-06-22T20:57:28.499Z"
+    }
+  ],
+  "blog_posts": [
+    {
+      "id": 1,
+      "title": "The Future of Cloud Computing in 2025",
+      "slug": "future-cloud-computing-2025",
+      "excerpt": "Explore the emerging trends and technologies that will shape cloud computing in 2025 and beyond.",
+      "content": "<h2>The Evolution of Cloud Technology</h2><p>Cloud computing continues to evolve at a rapid pace, with new innovations emerging every year. In 2025, we expect to see significant advancements in edge computing, serverless architectures, and AI-driven cloud services.</p><h3>Key Trends to Watch</h3><ul><li>Edge computing integration</li><li>Serverless-first architectures</li><li>AI-powered cloud optimization</li><li>Enhanced security measures</li></ul><p>Organizations that embrace these trends will gain a competitive advantage in the digital marketplace.</p>",
+      "image": "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "author_id": 1,
+      "category": "Cloud Computing",
+      "tags": [
+        "cloud",
+        "trends",
+        "2025",
+        "technology"
+      ],
+      "status": "published",
+      "read_time": "5 min read",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 2,
+      "title": "Cybersecurity Best Practices for Remote Teams",
+      "slug": "cybersecurity-best-practices-remote-teams",
+      "excerpt": "Essential security measures to protect your organization when employees work from anywhere.",
+      "content": "<h2>Securing the Remote Workforce</h2><p>With remote work becoming the norm, organizations must adapt their cybersecurity strategies to protect distributed teams and assets.</p><h3>Essential Security Measures</h3><ul><li>Multi-factor authentication</li><li>VPN implementation</li><li>Regular security training</li><li>Endpoint protection</li></ul><p>A comprehensive security strategy is crucial for maintaining business continuity in a remote work environment.</p>",
+      "image": "https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "author_id": 1,
+      "category": "Cybersecurity",
+      "tags": [
+        "security",
+        "remote-work",
+        "best-practices"
+      ],
+      "status": "published",
+      "read_time": "7 min read",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    },
+    {
+      "id": 3,
+      "title": "Digital Transformation: A Strategic Approach",
+      "slug": "digital-transformation-strategic-approach",
+      "excerpt": "Learn how to develop and execute a successful digital transformation strategy for your organization.",
+      "content": "<h2>Building a Digital-First Organization</h2><p>Digital transformation is more than just adopting new technologies—it's about fundamentally changing how your organization operates and delivers value to customers.</p><h3>Key Success Factors</h3><ul><li>Leadership commitment</li><li>Cultural change management</li><li>Technology integration</li><li>Continuous improvement</li></ul><p>Organizations that approach digital transformation strategically are more likely to achieve lasting success.</p>",
+      "image": "https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "author_id": 1,
+      "category": "Digital Transformation",
+      "tags": [
+        "digital-transformation",
+        "strategy",
+        "business"
+      ],
+      "status": "published",
+      "read_time": "6 min read",
+      "created_at": "2025-06-22T20:57:28.499Z",
+      "updated_at": "2025-06-22T20:57:28.499Z"
+    }
+  ]
+}

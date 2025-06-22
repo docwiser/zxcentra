@@ -11,13 +11,11 @@ interface CompanyData {
   name: string;
   email: string;
   phone: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  };
+  address_street: string;
+  address_city: string;
+  address_state: string;
+  address_zip: string;
+  address_country: string;
 }
 
 export default function ContactPage() {
@@ -47,10 +45,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
     setIsSubmitting(false);
     setSubmitted(true);
   };
@@ -90,9 +85,9 @@ export default function ContactPage() {
       icon: MapPin,
       title: 'Address',
       details: [
-        company.address.street,
-        `${company.address.city}, ${company.address.state} ${company.address.zip}`,
-        company.address.country,
+        company.address_street,
+        `${company.address_city}, ${company.address_state} ${company.address_zip}`,
+        company.address_country,
       ],
     },
     {
@@ -123,7 +118,6 @@ export default function ContactPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
           <Card>
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
@@ -170,7 +164,7 @@ export default function ContactPage() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium mb-2">
                       Email Address *
@@ -184,7 +178,7 @@ export default function ContactPage() {
                       placeholder="john@example.com"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="company" className="block text-sm font-medium mb-2">
                       Company
@@ -196,7 +190,7 @@ export default function ContactPage() {
                       placeholder="Your Company"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium mb-2">
                       Subject *
@@ -210,7 +204,7 @@ export default function ContactPage() {
                       placeholder="How can we help you?"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium mb-2">
                       Message *
@@ -224,10 +218,10 @@ export default function ContactPage() {
                       rows={6}
                     />
                   </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
+
+                  <Button
+                    type="submit"
+                    className="w-full"
                     disabled={isSubmitting}
                     aria-describedby={isSubmitting ? "submitting-status" : undefined}
                   >
@@ -243,7 +237,6 @@ export default function ContactPage() {
             </CardContent>
           </Card>
 
-          {/* Contact Information */}
           <div className="space-y-8">
             {contactInfo.map((info, index) => {
               const IconComponent = info.icon;
@@ -268,7 +261,6 @@ export default function ContactPage() {
               );
             })}
 
-            {/* Quick Actions */}
             <Card>
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>

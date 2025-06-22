@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, Menu, Github, Calendar, MapPin, X, User, Settings, LogOut, Shield } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { Search, Menu, Github, Calendar, MapPin, X, User, Settings, LogOut, Shield, FileText, Package, Briefcase } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CompanyData {
   name: string;
@@ -25,9 +27,9 @@ interface HeaderProps {
 export function Header({ companyData }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { data: session, status } = useSession();
   
-  // Use company data passed as prop
   const company = companyData;
 
   const navigation = company.navigation || [
@@ -41,10 +43,37 @@ export function Header({ companyData }: HeaderProps) {
 
   const isAdmin = session?.user?.role === 'admin';
 
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const headerVariants = {
+    initial: { y: -100 },
+    animate: { y: 0 },
+    exit: { y: -100 }
+  };
+
   return (
-    <header role="banner" className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <motion.header 
+      initial="initial"
+      animate="animate"
+      variants={headerVariants}
+      transition={{ duration: 0.3 }}
+      role="banner" 
+      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-background/95 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-background/60' 
+          : 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
+      }`}
+    >
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* CTAs moved to left */}
+        {/* Left Section - CTAs */}
         <div className="hidden lg:flex items-center space-x-2">
           <Button variant="ghost" size="sm" asChild>
             <Link 
@@ -52,8 +81,9 @@ export function Header({ companyData }: HeaderProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our GitHub repository"
+              className="group"
             >
-              <Github className="h-4 w-4 mr-2" />
+              <Github className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
               GitHub
             </Link>
           </Button>
@@ -61,8 +91,9 @@ export function Header({ companyData }: HeaderProps) {
             <Link 
               href="/contact"
               aria-label="Book an appointment with us"
+              className="group"
             >
-              <Calendar className="h-4 w-4 mr-2" />
+              <Calendar className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
               Book Appointment
             </Link>
           </Button>
@@ -70,76 +101,110 @@ export function Header({ companyData }: HeaderProps) {
             <Link 
               href="/about"
               aria-label="Discover our presence and locations"
+              className="group"
             >
-              <MapPin className="h-4 w-4 mr-2" />
+              <MapPin className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
               Our Presence
             </Link>
           </Button>
         </div>
 
-        {/* Logo and Company Name - Centered */}
-        <div className="flex items-center space-x-3">
+        {/* Center - Logo and Company Name */}
+        <motion.div 
+          className="flex items-center space-x-3"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <Link 
             href="/" 
             className="flex items-center space-x-3 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md"
             aria-label={`${company.name} - Go to homepage`}
           >
-            <img 
+            <motion.img 
               src={company.logo} 
               alt={`${company.name} logo`}
               className="h-8 w-8 rounded-md object-cover"
               width={32}
               height={32}
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
             />
-            <span className="font-bold text-lg text-primary">{company.name}</span>
+            <span className="font-bold text-lg text-primary bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+              {company.name}
+            </span>
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Navigation and User Menu */}
+        {/* Right Section - Navigation and User Menu */}
         <div className="flex items-center space-x-4">
           {/* Desktop Navigation */}
           <nav role="navigation" aria-label="Main navigation" className="hidden md:flex items-center space-x-6">
-            {navigation.map((item) => (
-              <Link
+            {navigation.map((item, index) => (
+              <motion.div
                 key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-2 py-1"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {item.name}
-              </Link>
+                <Link
+                  href={item.href}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-2 py-1 relative group"
+                >
+                  {item.name}
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </Link>
+              </motion.div>
             ))}
           </nav>
 
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Search */}
           <div className="hidden sm:flex relative">
-            {isSearchOpen ? (
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="w-64"
-                  aria-label="Search our website"
-                  autoFocus
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsSearchOpen(false)}
-                  aria-label="Close search"
+            <AnimatePresence>
+              {isSearchOpen ? (
+                <motion.div 
+                  className="flex items-center space-x-2"
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: "auto", opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsSearchOpen(true)}
-                aria-label="Open search"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
-            )}
+                  <Input
+                    type="search"
+                    placeholder="Search..."
+                    className="w-64"
+                    aria-label="Search our website"
+                    autoFocus
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsSearchOpen(false)}
+                    aria-label="Close search"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsSearchOpen(true)}
+                    aria-label="Open search"
+                    className="hover:scale-110 transition-transform"
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* User Menu */}
@@ -150,7 +215,7 @@ export function Header({ companyData }: HeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://gravatar.com/c121" alt={session.user.name} />
+                    <AvatarImage src={session.user.avatar || "https://gravatar.com/c121"} alt={session.user.name} />
                     <AvatarFallback>
                       {session.user.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
@@ -168,21 +233,42 @@ export function Header({ companyData }: HeaderProps) {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">
+                  <Link href="/profile" className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin">
-                      <Shield className="mr-2 h-4 w-4" />
-                      Admin Panel
-                    </Link>
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/blogs" className="cursor-pointer">
+                        <FileText className="mr-2 h-4 w-4" />
+                        Manage Blogs
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/products" className="cursor-pointer">
+                        <Package className="mr-2 h-4 w-4" />
+                        Manage Products
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/services" className="cursor-pointer">
+                        <Briefcase className="mr-2 h-4 w-4" />
+                        Manage Services
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   Sign out
                 </DropdownMenuItem>
@@ -230,7 +316,7 @@ export function Header({ companyData }: HeaderProps) {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
+                      className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2 px-3 rounded-md hover:bg-accent"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {item.name}
@@ -275,6 +361,6 @@ export function Header({ companyData }: HeaderProps) {
           </Sheet>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

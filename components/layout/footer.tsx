@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter, Youtube, Linkedin, Github } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Facebook, Instagram, Twitter, Youtube, Linkedin, Github, ExternalLink, FileText, Shield, Globe } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const socialIcons = {
   facebook: Facebook,
@@ -40,7 +44,6 @@ interface FooterProps {
 }
 
 export function Footer({ companyData }: FooterProps) {
-  // Use company data passed as prop
   const company = companyData;
 
   const footerLinks = company.footerLinks || {
@@ -73,13 +76,51 @@ export function Footer({ companyData }: FooterProps) {
     github: company.social_github,
   };
 
+  const getIconForLink = (linkName: string) => {
+    if (linkName.toLowerCase().includes('documentation') || linkName.toLowerCase().includes('blog')) {
+      return <FileText className="h-4 w-4 mr-2" />;
+    }
+    if (linkName.toLowerCase().includes('security') || linkName.toLowerCase().includes('privacy')) {
+      return <Shield className="h-4 w-4 mr-2" />;
+    }
+    if (linkName.toLowerCase().includes('api')) {
+      return <Globe className="h-4 w-4 mr-2" />;
+    }
+    return <ExternalLink className="h-4 w-4 mr-2" />;
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <footer role="contentinfo" className="bg-muted/50 border-t">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
+          <motion.div className="space-y-4" variants={itemVariants}>
+            <motion.div 
+              className="flex items-center space-x-3"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
               <img 
                 src={company.logo} 
                 alt={`${company.name} logo`}
@@ -88,17 +129,17 @@ export function Footer({ companyData }: FooterProps) {
                 height={32}
               />
               <span className="font-bold text-lg">{company.name}</span>
-            </div>
+            </motion.div>
             <p className="text-sm text-muted-foreground">
               {company.description}
             </p>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground space-y-1">
               <p>{company.address_street}</p>
               <p>{company.address_city}, {company.address_state} {company.address_zip}</p>
               <p className="mt-2">
                 <Link 
                   href={`mailto:${company.email}`}
-                  className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                  className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded inline-flex items-center"
                   aria-label={`Send email to ${company.email}`}
                 >
                   {company.email}
@@ -114,10 +155,10 @@ export function Footer({ companyData }: FooterProps) {
                 </Link>
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Company Links */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h3 className="font-semibold mb-4">Company</h3>
             <nav role="navigation" aria-label="Company links">
               <ul className="space-y-2">
@@ -125,18 +166,21 @@ export function Footer({ companyData }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded inline-flex items-center group"
                     >
-                      {link.name}
+                      {getIconForLink(link.name)}
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {link.name}
+                      </span>
                     </Link>
                   </li>
                 ))}
               </ul>
             </nav>
-          </div>
+          </motion.div>
 
           {/* Resources */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h3 className="font-semibold mb-4">Resources</h3>
             <nav role="navigation" aria-label="Resource links">
               <ul className="space-y-2">
@@ -144,18 +188,21 @@ export function Footer({ companyData }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded inline-flex items-center group"
                     >
-                      {link.name}
+                      {getIconForLink(link.name)}
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {link.name}
+                      </span>
                     </Link>
                   </li>
                 ))}
               </ul>
             </nav>
-          </div>
+          </motion.div>
 
           {/* Legal & Social */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h3 className="font-semibold mb-4">Legal</h3>
             <nav role="navigation" aria-label="Legal links">
               <ul className="space-y-2 mb-6">
@@ -163,9 +210,12 @@ export function Footer({ companyData }: FooterProps) {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded inline-flex items-center group"
                     >
-                      {link.name}
+                      {getIconForLink(link.name)}
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {link.name}
+                      </span>
                     </Link>
                   </li>
                 ))}
@@ -175,35 +225,54 @@ export function Footer({ companyData }: FooterProps) {
             {/* Social Media */}
             <div>
               <h4 className="font-semibold mb-3">Follow Us</h4>
-              <div className="flex space-x-3">
-                {Object.entries(socialLinks).map(([platform, url]) => {
-                  const IconComponent = socialIcons[platform as keyof typeof socialIcons];
-                  if (!IconComponent || !url) return null;
-                  
-                  return (
-                    <Link
-                      key={platform}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1"
-                      aria-label={`Follow us on ${platform}`}
-                    >
-                      <IconComponent className="h-5 w-5" />
-                    </Link>
-                  );
-                })}
-              </div>
+              <TooltipProvider>
+                <div className="flex space-x-3">
+                  {Object.entries(socialLinks).map(([platform, url]) => {
+                    const IconComponent = socialIcons[platform as keyof typeof socialIcons];
+                    if (!IconComponent || !url) return null;
+                    
+                    return (
+                      <Tooltip key={platform}>
+                        <TooltipTrigger asChild>
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <Link
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1"
+                              aria-label={`Follow us on ${platform}`}
+                            >
+                              <IconComponent className="h-5 w-5" />
+                            </Link>
+                          </motion.div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Follow us on {platform.charAt(0).toUpperCase() + platform.slice(1)}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
+              </TooltipProvider>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Copyright */}
-        <div className="border-t mt-8 pt-8 text-center">
+        <motion.div 
+          className="border-t mt-8 pt-8 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} {company.name}. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

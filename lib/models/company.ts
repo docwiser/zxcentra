@@ -1,4 +1,4 @@
-import db from '../database';
+import db from '../database/json-db';
 
 export interface CompanySettings {
   id: number;
@@ -26,27 +26,17 @@ export interface CompanySettings {
 
 export class CompanyModel {
   static getSettings(): CompanySettings | null {
-    const stmt = db.prepare('SELECT * FROM company_settings WHERE id = 1');
-    return stmt.get() as CompanySettings || null;
+    const settings = db.findAll<CompanySettings>('company_settings');
+    return settings.length > 0 ? settings[0] : null;
   }
 
   static updateSettings(updates: Partial<CompanySettings>): CompanySettings | null {
-    const fields = [];
-    const values = [];
-
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value !== undefined) {
-        fields.push(`${key} = ?`);
-        values.push(value);
-      }
-    });
-
-    fields.push('updated_at = CURRENT_TIMESTAMP');
-    values.push(1);
-
-    const stmt = db.prepare(`UPDATE company_settings SET ${fields.join(', ')} WHERE id = ?`);
-    stmt.run(...values);
-
-    return this.getSettings();
+    const existing = this.getSettings();
+    
+    if (existing) {
+      return db.update<CompanySettings>('company_settings', existing.id, updates);
+    } else {
+      return db.create<CompanySettings>('company_settings', updates);
+    }
   }
 }

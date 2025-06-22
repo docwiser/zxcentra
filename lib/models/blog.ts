@@ -1,4 +1,4 @@
-import db from '../database';
+import db from '../database/json-db';
 
 export interface BlogPost {
   id: number;
@@ -27,77 +27,52 @@ export interface BlogCategory {
 
 export class BlogModel {
   static findAllPublished(): BlogPost[] {
-    const stmt = db.prepare(`
-      SELECT bp.*, u.name as author_name 
-      FROM blog_posts bp 
-      LEFT JOIN users u ON bp.author_id = u.id 
-      WHERE bp.status = 'published' 
-      ORDER BY bp.created_at DESC
-    `);
-    const posts = stmt.all() as any[];
+    const posts = db.findMany<BlogPost>('blog_posts', { status: 'published' });
+    const users = db.findAll('users');
     
     return posts.map(post => ({
       ...post,
-      tags: JSON.parse(post.tags || '[]')
+      author_name: users.find((u: any) => u.id === post.author_id)?.name || 'Unknown'
     }));
   }
 
   static findBySlug(slug: string): BlogPost | undefined {
-    const stmt = db.prepare(`
-      SELECT bp.*, u.name as author_name 
-      FROM blog_posts bp 
-      LEFT JOIN users u ON bp.author_id = u.id 
-      WHERE bp.slug = ? AND bp.status = 'published'
-    `);
-    const post = stmt.get(slug) as any;
+    const post = db.findOne<BlogPost>('blog_posts', { slug, status: 'published' });
+    if (!post) return undefined;
     
-    if (post) {
-      return {
-        ...post,
-        tags: JSON.parse(post.tags || '[]')
-      };
-    }
+    const users = db.findAll('users');
+    const author = users.find((u: any) => u.id === post.author_id);
     
-    return undefined;
+    return {
+      ...post,
+      author_name: author?.name || 'Unknown'
+    };
   }
 
   static findById(id: number): BlogPost | undefined {
-    const stmt = db.prepare(`
-      SELECT bp.*, u.name as author_name 
-      FROM blog_posts bp 
-      LEFT JOIN users u ON bp.author_id = u.id 
-      WHERE bp.id = ?
-    `);
-    const post = stmt.get(id) as any;
+    const post = db.findById<BlogPost>('blog_posts', id);
+    if (!post) return undefined;
     
-    if (post) {
-      return {
-        ...post,
-        tags: JSON.parse(post.tags || '[]')
-      };
-    }
+    const users = db.findAll('users');
+    const author = users.find((u: any) => u.id === post.author_id);
     
-    return undefined;
+    return {
+      ...post,
+      author_name: author?.name || 'Unknown'
+    };
   }
 
   static findByCategory(category: string): BlogPost[] {
-    const stmt = db.prepare(`
-      SELECT bp.*, u.name as author_name 
-      FROM blog_posts bp 
-      LEFT JOIN users u ON bp.author_id = u.id 
-      WHERE bp.category = ? AND bp.status = 'published' 
-      ORDER BY bp.created_at DESC
-    `);
-    const posts = stmt.all(category) as any[];
+    const posts = db.findMany<BlogPost>('blog_posts', { category, status: 'published' });
+    const users = db.findAll('users');
     
     return posts.map(post => ({
       ...post,
-      tags: JSON.parse(post.tags || '[]')
+      author_name: users.find((u: any) => u.id === post.author_id)?.name || 'Unknown'
     }));
   }
 
   static findCategories(): BlogCategory[] {
-    const stmt = db.prepare('SELECT * FROM blog_categories ORDER BY name');
-    return stmt.all() as BlogCategory[];
+    return db.findAll<BlogCategory>('blog_categories');
   }
 }
