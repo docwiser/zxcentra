@@ -12,14 +12,14 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'ZXCentra - Innovating Tomorrow\'s Technology Today',
-    template: '%s | ZXCentra',
+    default: 'Zxentra - Innovating Tomorrow\'s Technology Today',
+    template: '%s | Zxentra',
   },
   description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
   keywords: ['technology', 'software', 'digital transformation', 'cloud services', 'enterprise solutions'],
-  authors: [{ name: 'ZXCentra' }],
-  creator: 'ZXCentra',
-  publisher: 'ZXCentra',
+  authors: [{ name: 'Zxentra' }],
+  creator: 'Zxentra',
+  publisher: 'Zxentra',
   robots: {
     index: true,
     follow: true,
@@ -34,25 +34,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://zxcentra.com',
-    title: 'ZXCentra - Innovating Tomorrow\'s Technology Today',
+    url: 'https://zxentra.com',
+    title: 'Zxentra - Innovating Tomorrow\'s Technology Today',
     description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
-    siteName: 'ZXCentra',
+    siteName: 'Zxentra',
     images: [
       {
         url: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&dpr=2',
         width: 1200,
         height: 630,
-        alt: 'ZXCentra logo',
+        alt: 'Zxentra logo',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ZXCentra - Innovating Tomorrow\'s Technology Today',
+    title: 'Zxentra - Innovating Tomorrow\'s Technology Today',
     description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
     images: ['https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&dpr=2'],
-    creator: '@techflow_sol',
+    creator: '@zxentra',
   },
   viewport: {
     width: 'device-width',
@@ -73,22 +73,21 @@ export default function RootLayout({
 }) {
   // Default company data for header/footer
   const defaultCompanyData = {
-    name: 'ZXCentra',
+    name: 'Zxentra',
     logo: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
-    social_github: 'https://github.com/zxcentra',
     description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
-    email: 'contact@zxcentra.com',
-    phone: '+1 (555) 123-4567',
+    email: 'contact@zxentra.com',
+    phone: '+91 8237308228',
     address_street: '123 Innovation Drive',
     address_city: 'San Francisco',
     address_state: 'CA',
     address_zip: '94105',
     address_country: 'USA',
-    social_linkedin: 'https://linkedin.com/company/zxcentra',
-    social_twitter: 'https://twitter.com/techflow_sol',
-    social_facebook: 'https://facebook.com/zxcentra',
-    social_instagram: 'https://instagram.com/zxcentra',
-    social_youtube: 'https://youtube.com/c/zxcentra',
+    social_linkedin: 'https://linkedin.com/company/zxentra',
+    social_twitter: 'https://twitter.com/zxentra',
+    social_facebook: 'https://facebook.com/zxentra',
+    social_instagram: 'https://instagram.com/zxentra',
+    social_youtube: 'https://youtube.com/c/zxentra',
   };
 
   return (

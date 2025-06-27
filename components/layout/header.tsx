@@ -9,13 +9,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Search, Menu, Github, Calendar, MapPin, X, User, Settings, LogOut, Shield, FileText, Package, Briefcase } from 'lucide-react';
+import { Search, Menu, Calendar, MapPin, X, User, Settings, LogOut, Shield, FileText, Package, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface CompanyData {
   name: string;
   logo: string;
-  social_github: string;
   navigation?: Array<{ name: string; href: string }>;
   [key: string]: any;
 }
@@ -34,7 +33,6 @@ export function Header({ companyData }: HeaderProps) {
 
   const navigation = company.navigation || [
     { name: 'Home', href: '/' },
-    { name: 'Products', href: '/products' },
     { name: 'Services', href: '/services' },
     { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
@@ -75,18 +73,6 @@ export function Header({ companyData }: HeaderProps) {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Left Section - CTAs */}
         <div className="hidden lg:flex items-center space-x-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link 
-              href={company.social_github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit our GitHub repository"
-              className="group"
-            >
-              <Github className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-              GitHub
-            </Link>
-          </Button>
           <Button variant="outline" size="sm" asChild>
             <Link 
               href="/contact"
@@ -254,12 +240,6 @@ export function Header({ companyData }: HeaderProps) {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/admin/products" className="cursor-pointer">
-                        <Package className="mr-2 h-4 w-4" />
-                        Manage Products
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
                       <Link href="/admin/services" className="cursor-pointer">
                         <Briefcase className="mr-2 h-4 w-4" />
                         Manage Services
@@ -326,17 +306,6 @@ export function Header({ companyData }: HeaderProps) {
 
                 {/* Mobile CTAs */}
                 <div className="flex flex-col space-y-3 pt-4 border-t">
-                  <Button variant="ghost" asChild>
-                    <Link 
-                      href={company.social_github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Github className="h-4 w-4 mr-2" />
-                      GitHub
-                    </Link>
-                  </Button>
                   <Button variant="outline" asChild>
                     <Link 
                       href="/contact"

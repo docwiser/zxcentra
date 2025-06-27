@@ -30,6 +30,9 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set page title
+    document.title = 'Blog | Zxentra';
+    
     const fetchData = async () => {
       try {
         const [postsRes, categoriesRes] = await Promise.all([

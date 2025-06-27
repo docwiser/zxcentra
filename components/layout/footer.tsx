@@ -1,9 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Facebook, Instagram, Twitter, Youtube, Linkedin, Github, ExternalLink, FileText, Shield, Globe } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Linkedin, ExternalLink, FileText, Shield, Globe, Send } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const socialIcons = {
   facebook: Facebook,
@@ -11,7 +16,6 @@ const socialIcons = {
   twitter: Twitter,
   youtube: Youtube,
   linkedin: Linkedin,
-  github: Github,
 };
 
 interface CompanyData {
@@ -25,7 +29,6 @@ interface CompanyData {
   address_state: string;
   address_zip: string;
   address_country: string;
-  social_github: string;
   social_linkedin: string;
   social_twitter: string;
   social_facebook: string;
@@ -44,6 +47,14 @@ interface FooterProps {
 }
 
 export function Footer({ companyData }: FooterProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
   const company = companyData;
 
   const footerLinks = company.footerLinks || {
@@ -73,7 +84,36 @@ export function Footer({ companyData }: FooterProps) {
     twitter: company.social_twitter,
     youtube: company.social_youtube,
     linkedin: company.social_linkedin,
-    github: company.social_github,
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.name,
+          email: formData.email,
+          message: formData.message,
+          type: 'footer'
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setSubmitted(false), 3000);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getIconForLink = (linkName: string) => {
@@ -201,30 +241,81 @@ export function Footer({ companyData }: FooterProps) {
             </nav>
           </motion.div>
 
-          {/* Legal & Social */}
+          {/* Quick Contact Form */}
           <motion.div variants={itemVariants}>
-            <h3 className="font-semibold mb-4">Legal</h3>
-            <nav role="navigation" aria-label="Legal links">
-              <ul className="space-y-2 mb-6">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded inline-flex items-center group"
-                    >
-                      {getIconForLink(link.name)}
-                      <span className="group-hover:translate-x-1 transition-transform">
-                        {link.name}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <h3 className="font-semibold mb-4">Drop Us a Line</h3>
+            {submitted ? (
+              <div className="text-center py-4">
+                <div className="text-primary text-2xl mb-2">✓</div>
+                <p className="text-sm text-muted-foreground">Message sent successfully!</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <Input
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  disabled={isSubmitting}
+                  className="text-sm"
+                />
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                  disabled={isSubmitting}
+                  className="text-sm"
+                />
+                <Textarea
+                  placeholder="Your message"
+                  value={formData.message}
+                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                  required
+                  disabled={isSubmitting}
+                  rows={3}
+                  className="text-sm resize-none"
+                />
+                <Button 
+                  type="submit" 
+                  size="sm" 
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  <Send className="h-3 w-3 mr-2" />
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </Button>
+              </form>
+            )}
+          </motion.div>
+        </motion.div>
+
+        {/* Bottom Section */}
+        <motion.div 
+          className="border-t mt-8 pt-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            {/* Legal Links */}
+            <div className="flex flex-wrap gap-4">
+              {footerLinks.legal.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
 
             {/* Social Media */}
-            <div>
-              <h4 className="font-semibold mb-3">Follow Us</h4>
+            <div className="flex items-center space-x-4">
+              <span className="text-xs text-muted-foreground">Follow us:</span>
               <TooltipProvider>
                 <div className="flex space-x-3">
                   {Object.entries(socialLinks).map(([platform, url]) => {
@@ -245,7 +336,7 @@ export function Footer({ companyData }: FooterProps) {
                               className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1"
                               aria-label={`Follow us on ${platform}`}
                             >
-                              <IconComponent className="h-5 w-5" />
+                              <IconComponent className="h-4 w-4" />
                             </Link>
                           </motion.div>
                         </TooltipTrigger>
@@ -258,20 +349,14 @@ export function Footer({ companyData }: FooterProps) {
                 </div>
               </TooltipProvider>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
 
-        {/* Copyright */}
-        <motion.div 
-          className="border-t mt-8 pt-8 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} {company.name}. All rights reserved.
-          </p>
+          {/* Copyright */}
+          <div className="text-center mt-4">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} {company.name}. All rights reserved.
+            </p>
+          </div>
         </motion.div>
       </div>
     </footer>

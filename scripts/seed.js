@@ -33,24 +33,23 @@ async function seed() {
       company_settings: [
         {
           id: 1,
-          name: 'ZXCentra',
+          name: 'Zxentra',
           tagline: 'Innovating Tomorrow\'s Technology Today',
           description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
           logo: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
-          website: 'https://zxcentra.com',
-          email: 'contact@zxcentra.com',
-          phone: '+1 (555) 123-4567',
+          website: 'https://zxentra.com',
+          email: 'contact@zxentra.com',
+          phone: '+91 8237308228',
           address_street: '123 Innovation Drive',
           address_city: 'San Francisco',
           address_state: 'CA',
           address_zip: '94105',
           address_country: 'USA',
-          social_github: 'https://github.com/zxcentra',
-          social_linkedin: 'https://linkedin.com/company/zxcentra',
-          social_twitter: 'https://twitter.com/techflow_sol',
-          social_facebook: 'https://facebook.com/zxcentra',
-          social_instagram: 'https://instagram.com/zxcentra',
-          social_youtube: 'https://youtube.com/c/zxcentra',
+          social_linkedin: 'https://linkedin.com/company/zxentra',
+          social_twitter: 'https://twitter.com/zxentra',
+          social_facebook: 'https://facebook.com/zxentra',
+          social_instagram: 'https://instagram.com/zxentra',
+          social_youtube: 'https://youtube.com/c/zxentra',
           founded: '2025',
           updated_at: now
         }
@@ -99,36 +98,132 @@ async function seed() {
       services: [
         {
           id: 1,
-          name: 'Digital Transformation Consulting',
-          description: 'Comprehensive digital transformation services to modernize your business operations and improve efficiency. Our experts guide you through every step of your digital journey.',
-          icon: 'Zap',
-          image: 'https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=800',
-          deliverables: ['Digital strategy consultation', 'Technology audit and assessment', 'Implementation roadmap', 'Change management support', 'Training and knowledge transfer'],
-          category: 'Consulting',
+          name: 'Full-Stack Development',
+          description: 'Complete web application development from frontend to backend with responsive design and modern technologies.',
+          icon: 'Code',
+          image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Web Application Design & Development (Frontend + Backend)', 'Responsive & Accessible UI/UX Design', 'API Development & Integration'],
+          category: 'Development',
           status: 'active',
           created_at: now,
           updated_at: now
         },
         {
           id: 2,
-          name: 'Cloud Migration Services',
-          description: 'Seamless cloud migration services that minimize downtime and maximize performance. Move your infrastructure to the cloud with confidence and expert support.',
-          icon: 'CloudUpload',
-          image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
-          deliverables: ['Migration assessment', 'Cloud architecture design', 'Data migration', 'Application modernization', 'Post-migration optimization'],
-          category: 'Cloud Services',
+          name: 'Mobile App Development',
+          description: 'Native and cross-platform mobile applications for Android and iOS with optimal performance and user experience.',
+          icon: 'Smartphone',
+          image: 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Android & iOS App Development', 'Cross-Platform Solutions (Flutter, React Native)', 'App Optimization & Maintenance'],
+          category: 'Mobile',
           status: 'active',
           created_at: now,
           updated_at: now
         },
         {
           id: 3,
-          name: 'Custom Software Development',
-          description: 'Tailored software solutions built to meet your unique business requirements. From concept to deployment, we deliver high-quality applications that drive results.',
-          icon: 'Code',
+          name: 'Software Development',
+          description: 'Custom desktop applications and enterprise software solutions tailored to your business needs.',
+          icon: 'Monitor',
+          image: 'https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Custom Desktop Applications', 'Enterprise Software Solutions', 'Productivity & Workflow Tools'],
+          category: 'Software',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 4,
+          name: 'Automation Solutions',
+          description: 'Streamline your business processes with intelligent automation and robotic process automation.',
+          icon: 'Bot',
+          image: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Business Process Automation', 'RPA (Robotic Process Automation)', 'Automated Testing & Deployment Pipelines'],
+          category: 'Automation',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 5,
+          name: 'Cybersecurity Solutions',
+          description: 'Comprehensive security services to protect your digital assets and ensure compliance.',
+          icon: 'Shield',
+          image: 'https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Penetration Testing & Vulnerability Assessment', 'Security Audits & Compliance', 'Secure Software & Network Architecture'],
+          category: 'Security',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 6,
+          name: 'Cloud Development',
+          description: 'Cloud-native applications and infrastructure solutions for scalable and reliable systems.',
+          icon: 'Cloud',
+          image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Cloud-Native App Development', 'AWS / Azure / Google Cloud Solutions', 'DevOps & CI/CD Pipelines'],
+          category: 'Cloud',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 7,
+          name: 'AI Integration & Solutions',
+          description: 'Artificial intelligence and machine learning solutions to enhance your business capabilities.',
+          icon: 'Brain',
+          image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['AI/ML Model Integration', 'Chatbots, Recommendation Systems', 'Intelligent Automation & Predictive Analytics'],
+          category: 'AI/ML',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 8,
+          name: 'Infrastructure Management',
+          description: 'Complete infrastructure setup, monitoring, and maintenance for optimal performance.',
+          icon: 'Server',
+          image: 'https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Server Setup & Maintenance', 'Monitoring & Scaling Solutions', 'Network & Data Center Management'],
+          category: 'Infrastructure',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 9,
+          name: 'Graphic Design',
+          description: 'Creative design services for branding, UI/UX, and digital assets.',
+          icon: 'Palette',
+          image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['Logo, Branding & Identity', 'UI/UX Design', 'Digital Assets for Web & Mobile'],
+          category: 'Design',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 10,
+          name: 'Game Development',
+          description: '2D and 3D game development with immersive experiences across platforms.',
+          icon: 'Gamepad2',
+          image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=800',
+          deliverables: ['2D/3D Game Design & Development', 'Audio-Based Game Experiences', 'Cross-Platform Deployment'],
+          category: 'Gaming',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 11,
+          name: 'Backend Development',
+          description: 'Robust backend systems with microservices architecture and optimized databases.',
+          icon: 'Database',
           image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=800',
-          deliverables: ['Requirements analysis', 'Custom application development', 'Quality assurance testing', 'Deployment and integration', 'Ongoing maintenance and support'],
-          category: 'Development',
+          deliverables: ['Microservices Architecture', 'Database Design & Optimization', 'Secure & Scalable Server-Side Logic'],
+          category: 'Backend',
           status: 'active',
           created_at: now,
           updated_at: now
@@ -210,11 +305,103 @@ async function seed() {
           created_at: now,
           updated_at: now
         }
+      ],
+      email_settings: [],
+      contact_submissions: [],
+      testimonials: [
+        {
+          id: 1,
+          name: 'Sarah Johnson',
+          position: 'CTO',
+          company: 'TechCorp Inc.',
+          content: 'Zxentra delivered exceptional results on our cloud migration project. Their expertise and professionalism exceeded our expectations.',
+          rating: 5,
+          image: 'https://images.pexels.com/photos/3184344/pexels-photo-3184344.jpeg?auto=compress&cs=tinysrgb&w=300',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 2,
+          name: 'Michael Chen',
+          position: 'CEO',
+          company: 'StartupXYZ',
+          content: 'The mobile app they developed for us has been a game-changer. User engagement increased by 300% after launch.',
+          rating: 5,
+          image: 'https://images.pexels.com/photos/3184398/pexels-photo-3184398.jpeg?auto=compress&cs=tinysrgb&w=300',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 3,
+          name: 'Emily Rodriguez',
+          position: 'Product Manager',
+          company: 'InnovateLabs',
+          content: 'Outstanding AI integration work. The recommendation system they built has significantly improved our customer experience.',
+          rating: 5,
+          image: 'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=300',
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        }
+      ],
+      faqs: [
+        {
+          id: 1,
+          question: 'What services does Zxentra offer?',
+          answer: 'We offer a comprehensive range of technology services including full-stack development, mobile app development, cloud solutions, AI integration, cybersecurity, and more. Our team specializes in delivering custom solutions tailored to your business needs.',
+          category: 'General',
+          order: 1,
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 2,
+          question: 'How long does a typical project take?',
+          answer: 'Project timelines vary depending on complexity and scope. Simple websites may take 2-4 weeks, while complex enterprise applications can take 3-6 months. We provide detailed timelines during our initial consultation.',
+          category: 'Projects',
+          order: 2,
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 3,
+          question: 'Do you provide ongoing support and maintenance?',
+          answer: 'Yes, we offer comprehensive support and maintenance packages for all our solutions. This includes regular updates, security patches, performance monitoring, and technical support.',
+          category: 'Support',
+          order: 3,
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 4,
+          question: 'What technologies do you work with?',
+          answer: 'We work with a wide range of modern technologies including React, Node.js, Python, Flutter, AWS, Azure, Docker, Kubernetes, and many more. We choose the best technology stack for each project.',
+          category: 'Technical',
+          order: 4,
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        },
+        {
+          id: 5,
+          question: 'How do you ensure project quality?',
+          answer: 'We follow industry best practices including code reviews, automated testing, continuous integration, and regular client feedback sessions. Quality assurance is integrated throughout our development process.',
+          category: 'Quality',
+          order: 5,
+          status: 'active',
+          created_at: now,
+          updated_at: now
+        }
       ]
     };
 
     fs.writeFileSync(dbFile, JSON.stringify(initialData, null, 2));
-    console.log('✅ Database seeded successfully with JSON data.');
+    console.log('✅ Database seeded successfully with updated data.');
   } catch (error) {
     console.error('❌ Error seeding database:', error);
     process.exit(1);

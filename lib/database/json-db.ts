@@ -8,6 +8,10 @@ export interface DatabaseSchema {
   services: any[];
   blog_posts: any[];
   blog_categories: any[];
+  email_settings: any[];
+  contact_submissions: any[];
+  testimonials: any[];
+  faqs: any[];
 }
 
 class JsonDatabase {
@@ -35,7 +39,11 @@ class JsonDatabase {
         products: [],
         services: [],
         blog_posts: [],
-        blog_categories: []
+        blog_categories: [],
+        email_settings: [],
+        contact_submissions: [],
+        testimonials: [],
+        faqs: []
       };
       this.writeData(initialData);
     }
@@ -44,7 +52,38 @@ class JsonDatabase {
   private readData(): DatabaseSchema {
     try {
       const data = fs.readFileSync(this.dbFile, 'utf8');
-      return JSON.parse(data);
+      const parsedData = JSON.parse(data);
+      
+      // Ensure all required tables exist as arrays
+      const defaultData: DatabaseSchema = {
+        users: [],
+        company_settings: [],
+        products: [],
+        services: [],
+        blog_posts: [],
+        blog_categories: [],
+        email_settings: [],
+        contact_submissions: [],
+        testimonials: [],
+        faqs: []
+      };
+
+      // Merge with default data to ensure all tables exist
+      return {
+        ...defaultData,
+        ...parsedData,
+        // Ensure each table is an array
+        users: Array.isArray(parsedData.users) ? parsedData.users : [],
+        company_settings: Array.isArray(parsedData.company_settings) ? parsedData.company_settings : [],
+        products: Array.isArray(parsedData.products) ? parsedData.products : [],
+        services: Array.isArray(parsedData.services) ? parsedData.services : [],
+        blog_posts: Array.isArray(parsedData.blog_posts) ? parsedData.blog_posts : [],
+        blog_categories: Array.isArray(parsedData.blog_categories) ? parsedData.blog_categories : [],
+        email_settings: Array.isArray(parsedData.email_settings) ? parsedData.email_settings : [],
+        contact_submissions: Array.isArray(parsedData.contact_submissions) ? parsedData.contact_submissions : [],
+        testimonials: Array.isArray(parsedData.testimonials) ? parsedData.testimonials : [],
+        faqs: Array.isArray(parsedData.faqs) ? parsedData.faqs : []
+      };
     } catch (error) {
       console.error('Error reading database:', error);
       return {
@@ -53,7 +92,11 @@ class JsonDatabase {
         products: [],
         services: [],
         blog_posts: [],
-        blog_categories: []
+        blog_categories: [],
+        email_settings: [],
+        contact_submissions: [],
+        testimonials: [],
+        faqs: []
       };
     }
   }
@@ -69,17 +112,23 @@ class JsonDatabase {
   // Generic CRUD operations
   findAll<T>(table: keyof DatabaseSchema): T[] {
     const data = this.readData();
-    return data[table] as T[];
+    const tableData = data[table];
+    return Array.isArray(tableData) ? tableData as T[] : [];
   }
 
   findById<T>(table: keyof DatabaseSchema, id: number): T | undefined {
     const data = this.readData();
-    return (data[table] as any[]).find(item => item.id === id);
+    const tableData = data[table];
+    if (!Array.isArray(tableData)) return undefined;
+    return tableData.find(item => item.id === id);
   }
 
   findOne<T>(table: keyof DatabaseSchema, query: Partial<T>): T | undefined {
     const data = this.readData();
-    return (data[table] as T[]).find(item => {
+    const tableData = data[table];
+    if (!Array.isArray(tableData)) return undefined;
+    
+    return (tableData as T[]).find(item => {
       return Object.entries(query).every(([key, value]) => 
         (item as any)[key] === value
       );
@@ -88,7 +137,10 @@ class JsonDatabase {
 
   findMany<T>(table: keyof DatabaseSchema, query: Partial<T>): T[] {
     const data = this.readData();
-    return (data[table] as T[]).filter(item => {
+    const tableData = data[table];
+    if (!Array.isArray(tableData)) return [];
+    
+    return (tableData as T[]).filter(item => {
       return Object.entries(query).every(([key, value]) => 
         (item as any)[key] === value
       );
@@ -97,7 +149,8 @@ class JsonDatabase {
 
   create<T>(table: keyof DatabaseSchema, item: Omit<T, 'id' | 'created_at' | 'updated_at'>): T {
     const data = this.readData();
-    const items = data[table] as any[];
+    const tableData = data[table];
+    const items = Array.isArray(tableData) ? tableData : [];
     const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
     
     const newItem = {
@@ -108,13 +161,15 @@ class JsonDatabase {
     };
 
     items.push(newItem);
+    data[table] = items as any;
     this.writeData(data);
     return newItem as T;
   }
 
   update<T>(table: keyof DatabaseSchema, id: number, updates: Partial<T>): T | null {
     const data = this.readData();
-    const items = data[table] as any[];
+    const tableData = data[table];
+    const items = Array.isArray(tableData) ? tableData : [];
     const index = items.findIndex(item => item.id === id);
     
     if (index === -1) return null;
@@ -125,18 +180,21 @@ class JsonDatabase {
       updated_at: new Date().toISOString()
     };
 
+    data[table] = items as any;
     this.writeData(data);
     return items[index] as T;
   }
 
   delete(table: keyof DatabaseSchema, id: number): boolean {
     const data = this.readData();
-    const items = data[table] as any[];
+    const tableData = data[table];
+    const items = Array.isArray(tableData) ? tableData : [];
     const index = items.findIndex(item => item.id === id);
     
     if (index === -1) return false;
 
     items.splice(index, 1);
+    data[table] = items as any;
     this.writeData(data);
     return true;
   }
@@ -144,7 +202,8 @@ class JsonDatabase {
   // Special operations
   upsert<T>(table: keyof DatabaseSchema, item: any, uniqueField: string): T {
     const data = this.readData();
-    const items = data[table] as any[];
+    const tableData = data[table];
+    const items = Array.isArray(tableData) ? tableData : [];
     const existingIndex = items.findIndex(i => i[uniqueField] === item[uniqueField]);
 
     if (existingIndex !== -1) {
@@ -153,6 +212,7 @@ class JsonDatabase {
         ...item,
         updated_at: new Date().toISOString()
       };
+      data[table] = items as any;
       this.writeData(data);
       return items[existingIndex] as T;
     } else {
@@ -162,7 +222,8 @@ class JsonDatabase {
 
   count(table: keyof DatabaseSchema, query?: any): number {
     const data = this.readData();
-    const items = data[table] as any[];
+    const tableData = data[table];
+    const items = Array.isArray(tableData) ? tableData : [];
     
     if (!query) return items.length;
     

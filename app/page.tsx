@@ -7,23 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Carousel } from '@/components/ui/carousel';
-import { ArrowRight, Star, Users, Shield, Zap, Play, ChevronDown } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { ArrowRight, Star, Users, Shield, Zap, Play, ChevronDown, Quote } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
 interface Company {
   name: string;
   tagline: string;
   description: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  icon: string;
-  image: string;
-  features: string[];
-  price: string;
 }
 
 interface Service {
@@ -35,19 +26,38 @@ interface Service {
   deliverables: string[];
 }
 
+interface Testimonial {
+  id: number;
+  name: string;
+  position: string;
+  company: string;
+  content: string;
+  rating: number;
+  image?: string;
+}
+
+interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+}
+
 export default function Home() {
   const [company, setCompany] = useState<Company | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [companyRes, productsRes, servicesRes] = await Promise.all([
+        const [companyRes, servicesRes, testimonialsRes, faqsRes] = await Promise.all([
           fetch('/api/company/data'),
-          fetch('/api/products'),
-          fetch('/api/services')
+          fetch('/api/services'),
+          fetch('/api/testimonials'),
+          fetch('/api/faqs')
         ]);
 
         if (companyRes.ok) {
@@ -55,14 +65,19 @@ export default function Home() {
           setCompany(companyData);
         }
 
-        if (productsRes.ok) {
-          const productsData = await productsRes.json();
-          setProducts(productsData);
-        }
-
         if (servicesRes.ok) {
           const servicesData = await servicesRes.json();
           setServices(servicesData);
+        }
+
+        if (testimonialsRes.ok) {
+          const testimonialsData = await testimonialsRes.json();
+          setTestimonials(testimonialsData);
+        }
+
+        if (faqsRes.ok) {
+          const faqsData = await faqsRes.json();
+          setFaqs(faqsData);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -119,7 +134,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section with Video Background */}
+      {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-blue-950/20 dark:via-background dark:to-blue-950/20">
@@ -174,8 +189,8 @@ export default function Home() {
               variants={itemVariants}
             >
               <Button size="lg" asChild className="group">
-                <Link href="/products">
-                  Explore Products
+                <Link href="/services">
+                  Explore Services
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
@@ -236,96 +251,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products Carousel */}
-      {products.length > 0 && (
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <motion.div 
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Featured Products</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Discover our cutting-edge solutions designed to transform your business
-              </p>
-            </motion.div>
-            
-            <div className="max-w-6xl mx-auto">
-              <Carousel autoPlay={true} autoPlayInterval={4000} className="h-96">
-                {products.map((product) => {
-                  const IconComponent = LucideIcons[product.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
-                  
-                  return (
-                    <motion.div
-                      key={product.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Card className="h-full group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-                          <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
-                            <img 
-                              src={product.image} 
-                              alt={product.name}
-                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
-                          <div className="p-8 flex flex-col justify-center">
-                            <div className="flex items-center space-x-3 mb-4">
-                              {IconComponent && <IconComponent className="h-8 w-8 text-primary" />}
-                              <h3 className="text-2xl font-bold">{product.name}</h3>
-                            </div>
-                            <p className="text-muted-foreground mb-6 text-lg">
-                              {product.description}
-                            </p>
-                            <div className="flex flex-wrap gap-2 mb-6">
-                              {product.features.slice(0, 3).map((feature, index) => (
-                                <Badge key={index} variant="secondary">
-                                  {feature}
-                                </Badge>
-                              ))}
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-3xl font-bold text-primary">{product.price}</span>
-                              <Button asChild className="group">
-                                <Link href={`/products/${product.id}`}>
-                                  Learn More
-                                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
-                    </motion.div>
-                  );
-                })}
-              </Carousel>
-            </div>
-            
-            <motion.div 
-              className="text-center mt-12"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <Button variant="outline" size="lg" asChild className="group">
-                <Link href="/products">
-                  View All Products
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-      )}
-
       {/* Services Carousel */}
       {services.length > 0 && (
-        <section className="py-20 bg-muted/50">
+        <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div 
               className="text-center mb-16"
@@ -335,12 +263,12 @@ export default function Home() {
             >
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Services</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Professional services to accelerate your digital transformation journey
+                Professional technology services to accelerate your digital transformation journey
               </p>
             </motion.div>
             
             <div className="max-w-6xl mx-auto">
-              <Carousel autoPlay={true} autoPlayInterval={5000} className="h-80">
+              <Carousel autoPlay={true} autoPlayInterval={4000} className="h-96">
                 {services.map((service) => {
                   const IconComponent = LucideIcons[service.icon as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
                   
@@ -351,13 +279,13 @@ export default function Home() {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                      <Card className="h-full group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
                         <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
                           <div className="aspect-video lg:aspect-auto relative overflow-hidden rounded-l-lg">
                             <img 
                               src={service.image} 
                               alt={service.name}
-                              className="object-cover w-full h-full"
+                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                             />
                           </div>
                           <div className="p-8 flex flex-col justify-center">
@@ -369,7 +297,7 @@ export default function Home() {
                               {service.description}
                             </p>
                             <div className="space-y-2 mb-6">
-                              <h4 className="font-semibold">Deliverables:</h4>
+                              <h4 className="font-semibold">What You Get:</h4>
                               <ul className="space-y-1">
                                 {service.deliverables.slice(0, 3).map((deliverable, index) => (
                                   <li key={index} className="text-sm text-muted-foreground flex items-center">
@@ -407,6 +335,127 @@ export default function Home() {
                 </Link>
               </Button>
             </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <section className="py-20 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">What Our Clients Say</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Don't just take our word for it - hear from our satisfied clients
+              </p>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={testimonial.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardHeader>
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-muted">
+                          {testimonial.image ? (
+                            <img 
+                              src={testimonial.image} 
+                              alt={testimonial.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-lg font-bold">
+                              {testimonial.name.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{testimonial.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {testimonial.position} at {testimonial.company}
+                          </p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-4 w-4 ${
+                              i < testimonial.rating 
+                                ? 'text-yellow-400 fill-yellow-400' 
+                                : 'text-gray-300'
+                            }`} 
+                          />
+                        ))}
+                      </div>
+                      <div className="relative">
+                        <Quote className="absolute -top-2 -left-2 h-6 w-6 text-primary/20" />
+                        <p className="text-muted-foreground italic pl-4">
+                          {testimonial.content}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ Section */}
+      {faqs.length > 0 && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Find answers to common questions about our services and process
+              </p>
+            </motion.div>
+            
+            <div className="max-w-3xl mx-auto">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <AccordionItem value={`item-${faq.id}`}>
+                      <AccordionTrigger className="text-left">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <p className="text-muted-foreground">
+                          {faq.answer}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </motion.div>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </section>
       )}
