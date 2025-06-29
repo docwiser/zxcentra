@@ -17,7 +17,10 @@ import {
   Shield,
   BarChart3,
   Globe,
-  LogOut
+  LogOut,
+  HelpCircle,
+  MessageSquare,
+  Mail
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -28,6 +31,9 @@ export default function AdminPage() {
     totalBlogs: 0,
     totalProducts: 0,
     totalServices: 0,
+    totalFaqs: 0,
+    totalTestimonials: 0,
+    totalContactSubmissions: 0,
   });
 
   useEffect(() => {
@@ -104,6 +110,30 @@ export default function AdminPage() {
       href: '/admin/services',
       count: stats.totalServices,
       permission: 'service:read',
+    },
+    {
+      title: 'FAQ Management',
+      description: 'Manage frequently asked questions',
+      icon: HelpCircle,
+      href: '/admin/faqs',
+      count: stats.totalFaqs,
+      permission: 'admin:access',
+    },
+    {
+      title: 'Testimonial Management',
+      description: 'Manage customer testimonials',
+      icon: MessageSquare,
+      href: '/admin/testimonials',
+      count: stats.totalTestimonials,
+      permission: 'admin:access',
+    },
+    {
+      title: 'Contact Submissions',
+      description: 'View and manage contact form submissions',
+      icon: Mail,
+      href: '/admin/contact-submissions',
+      count: stats.totalContactSubmissions,
+      permission: 'admin:access',
     },
     {
       title: 'Site Settings',

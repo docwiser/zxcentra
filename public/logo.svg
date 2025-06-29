@@ -1,0 +1,46 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1D4ED8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" filter="url(#glow)"/>
+  
+  <!-- Letter Z -->
+  <path d="M25 30 L65 30 L65 35 L35 35 L65 65 L65 70 L25 70 L25 65 L55 65 L25 35 Z" 
+        fill="white" 
+        stroke="white" 
+        stroke-width="1"/>
+  
+  <!-- Letter X -->
+  <g transform="translate(70, 25)">
+    <path d="M5 5 L15 15 M15 5 L5 15" 
+          stroke="white" 
+          stroke-width="3" 
+          stroke-linecap="round"/>
+  </g>
+  
+  <!-- Tech Circuit Pattern -->
+  <g opacity="0.3">
+    <circle cx="20" cy="20" r="2" fill="white"/>
+    <circle cx="80" cy="80" r="2" fill="white"/>
+    <line x1="20" y1="20" x2="30" y2="20" stroke="white" stroke-width="1"/>
+    <line x1="70" y1="80" x2="80" y2="80" stroke="white" stroke-width="1"/>
+    <rect x="28" y="18" width="4" height="4" fill="white"/>
+    <rect x="68" y="78" width="4" height="4" fill="white"/>
+  </g>
+  
+  <!-- Subtle shine effect -->
+  <ellipse cx="35" cy="25" rx="8" ry="15" fill="white" opacity="0.2" transform="rotate(-45 35 25)"/>
+</svg>

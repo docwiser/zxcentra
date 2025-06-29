@@ -8,7 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Carousel } from '@/components/ui/carousel';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ArrowRight, Star, Users, Shield, Zap, Play, ChevronDown, Quote } from 'lucide-react';
+import { ParticlesBackground } from '@/components/ui/particles-background';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faPlay, faChevronDown, faQuoteLeft, faUsers, faStar, faShield, faZap } from '@fortawesome/free-solid-svg-icons';
 import * as LucideIcons from 'lucide-react';
 
 interface Company {
@@ -90,10 +92,10 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { label: 'Happy Clients', value: '500+', icon: Users },
-    { label: 'Projects Completed', value: '1000+', icon: Star },
-    { label: 'Years Experience', value: '5+', icon: Shield },
-    { label: 'Team Members', value: '50+', icon: Zap },
+    { label: 'Happy Clients', value: '500+', icon: faUsers },
+    { label: 'Projects Completed', value: '1000+', icon: faStar },
+    { label: 'Years Experience', value: '5+', icon: faShield },
+    { label: 'Team Members', value: '50+', icon: faZap },
   ];
 
   const containerVariants = {
@@ -114,8 +116,9 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex flex-col">
-        <section className="relative py-20 lg:py-32 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-blue-950/20 dark:via-background dark:to-blue-950/20">
-          <div className="container mx-auto px-4 text-center">
+        <ParticlesBackground />
+        <section className="relative py-20 lg: py-32 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-blue-950/20 dark:via-background dark:to-blue-950/20">
+          <div className="container mx-auto px-4 text-center relative z-10">
             <div className="max-w-4xl mx-auto">
               <div className="animate-pulse">
                 <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-6"></div>
@@ -134,6 +137,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
+      <ParticlesBackground />
+      
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         {/* Animated Background */}
@@ -191,12 +196,12 @@ export default function Home() {
               <Button size="lg" asChild className="group">
                 <Link href="/services">
                   Explore Services
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="group">
                 <Link href="/contact">
-                  <Play className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <FontAwesomeIcon icon={faPlay} className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Get Started
                 </Link>
               </Button>
@@ -210,12 +215,12 @@ export default function Home() {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <ChevronDown className="h-6 w-6 text-muted-foreground" />
+          <FontAwesomeIcon icon={faChevronDown} className="h-6 w-6 text-muted-foreground" />
         </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section className="py-16 bg-primary text-primary-foreground relative z-10">
         <div className="container mx-auto px-4">
           <motion.div 
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
@@ -224,36 +229,33 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
-              return (
+            {stats.map((stat, index) => (
+              <motion.div 
+                key={index} 
+                className="text-center"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+              >
+                <FontAwesomeIcon icon={stat.icon} className="h-8 w-8 mx-auto mb-2 opacity-80" />
                 <motion.div 
-                  key={index} 
-                  className="text-center"
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.05 }}
+                  className="text-3xl font-bold mb-1"
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + 0.5, type: "spring" }}
                 >
-                  <IconComponent className="h-8 w-8 mx-auto mb-2 opacity-80" />
-                  <motion.div 
-                    className="text-3xl font-bold mb-1"
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.5, type: "spring" }}
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <div className="text-sm opacity-80">{stat.label}</div>
+                  {stat.value}
                 </motion.div>
-              );
-            })}
+                <div className="text-sm opacity-80">{stat.label}</div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
       {/* Services Carousel */}
       {services.length > 0 && (
-        <section className="py-20">
+        <section className="py-20 relative z-10">
           <div className="container mx-auto px-4">
             <motion.div 
               className="text-center mb-16"
@@ -310,7 +312,7 @@ export default function Home() {
                             <Button asChild className="group">
                               <Link href={`/services/${service.id}`}>
                                 Learn More
-                                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                               </Link>
                             </Button>
                           </div>
@@ -331,7 +333,7 @@ export default function Home() {
               <Button variant="outline" size="lg" asChild className="group">
                 <Link href="/services">
                   View All Services
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </motion.div>
@@ -341,7 +343,7 @@ export default function Home() {
 
       {/* Testimonials Section */}
       {testimonials.length > 0 && (
-        <section className="py-20 bg-muted/50">
+        <section className="py-20 bg-muted/50 relative z-10">
           <div className="container mx-auto px-4">
             <motion.div 
               className="text-center mb-16"
@@ -391,18 +393,19 @@ export default function Home() {
                     <CardContent>
                       <div className="flex items-center mb-4">
                         {[...Array(5)].map((_, i) => (
-                          <Star 
+                          <FontAwesomeIcon 
                             key={i} 
+                            icon={faStar}
                             className={`h-4 w-4 ${
                               i < testimonial.rating 
-                                ? 'text-yellow-400 fill-yellow-400' 
+                                ? 'text-yellow-400' 
                                 : 'text-gray-300'
                             }`} 
                           />
                         ))}
                       </div>
                       <div className="relative">
-                        <Quote className="absolute -top-2 -left-2 h-6 w-6 text-primary/20" />
+                        <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-2 h-6 w-6 text-primary/20" />
                         <p className="text-muted-foreground italic pl-4">
                           {testimonial.content}
                         </p>
@@ -418,7 +421,7 @@ export default function Home() {
 
       {/* FAQ Section */}
       {faqs.length > 0 && (
-        <section className="py-20">
+        <section className="py-20 relative z-10">
           <div className="container mx-auto px-4">
             <motion.div 
               className="text-center mb-16"
@@ -461,7 +464,7 @@ export default function Home() {
       )}
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
+      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden z-10">
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-primary via-blue-600 to-primary"
           animate={{
@@ -490,13 +493,13 @@ export default function Home() {
               <Button size="lg" variant="secondary" asChild className="group">
                 <Link href="/contact">
                   Start Your Project
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary group" asChild>
                 <Link href="/about">
                   Learn More About Us
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </div>

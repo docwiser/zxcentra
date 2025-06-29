@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { hasPermission } from '@/lib/permissions';
 import { getAllUsers } from '@/lib/users';
 import { getProducts, getServices } from '@/lib/company';
+import db from '@/lib/database/json-db';
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,12 +20,19 @@ export async function GET(request: NextRequest) {
     const users = getAllUsers();
     const products = await getProducts();
     const services = await getServices();
+    const blogs = db.findAll('blog_posts');
+    const faqs = db.findAll('faqs');
+    const testimonials = db.findAll('testimonials');
+    const contactSubmissions = db.findAll('contact_submissions');
 
     const stats = {
       totalUsers: users.length,
-      totalBlogs: 6, // Mock data - would come from blog storage
+      totalBlogs: blogs.length,
       totalProducts: products.length,
       totalServices: services.length,
+      totalFaqs: faqs.length,
+      totalTestimonials: testimonials.length,
+      totalContactSubmissions: contactSubmissions.length,
     };
 
     return NextResponse.json(stats);

@@ -9,7 +9,8 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Search, Menu, Calendar, MapPin, X, User, Settings, LogOut, Shield, FileText, Package, Briefcase } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faBars, faCalendar, faMapMarkerAlt, faTimes, faUser, faCog, faSignOutAlt, faShield, faFileText, faBox, faBriefcase, faQuestionCircle, faComments, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface CompanyData {
@@ -79,7 +80,7 @@ export function Header({ companyData }: HeaderProps) {
               aria-label="Book an appointment with us"
               className="group"
             >
-              <Calendar className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+              <FontAwesomeIcon icon={faCalendar} className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
               Book Appointment
             </Link>
           </Button>
@@ -89,7 +90,7 @@ export function Header({ companyData }: HeaderProps) {
               aria-label="Discover our presence and locations"
               className="group"
             >
-              <MapPin className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
               Our Presence
             </Link>
           </Button>
@@ -170,7 +171,7 @@ export function Header({ companyData }: HeaderProps) {
                     onClick={() => setIsSearchOpen(false)}
                     aria-label="Close search"
                   >
-                    <X className="h-4 w-4" />
+                    <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
                   </Button>
                 </motion.div>
               ) : (
@@ -186,7 +187,7 @@ export function Header({ companyData }: HeaderProps) {
                     aria-label="Open search"
                     className="hover:scale-110 transition-transform"
                   >
-                    <Search className="h-4 w-4" />
+                    <FontAwesomeIcon icon={faSearch} className="h-4 w-4" />
                   </Button>
                 </motion.div>
               )}
@@ -220,7 +221,7 @@ export function Header({ companyData }: HeaderProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/profile" className="cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
+                    <FontAwesomeIcon icon={faUser} className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
@@ -228,28 +229,52 @@ export function Header({ companyData }: HeaderProps) {
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/admin" className="cursor-pointer">
-                        <Shield className="mr-2 h-4 w-4" />
+                        <FontAwesomeIcon icon={faShield} className="mr-2 h-4 w-4" />
                         Admin Panel
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link href="/admin/blogs" className="cursor-pointer">
-                        <FileText className="mr-2 h-4 w-4" />
+                        <FontAwesomeIcon icon={faFileText} className="mr-2 h-4 w-4" />
                         Manage Blogs
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link href="/admin/products" className="cursor-pointer">
+                        <FontAwesomeIcon icon={faBox} className="mr-2 h-4 w-4" />
+                        Manage Products
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/admin/services" className="cursor-pointer">
-                        <Briefcase className="mr-2 h-4 w-4" />
+                        <FontAwesomeIcon icon={faBriefcase} className="mr-2 h-4 w-4" />
                         Manage Services
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/faqs" className="cursor-pointer">
+                        <FontAwesomeIcon icon={faQuestionCircle} className="mr-2 h-4 w-4" />
+                        Manage FAQs
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/testimonials" className="cursor-pointer">
+                        <FontAwesomeIcon icon={faComments} className="mr-2 h-4 w-4" />
+                        Manage Testimonials
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/contact-submissions" className="cursor-pointer">
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2 h-4 w-4" />
+                        Contact Submissions
                       </Link>
                     </DropdownMenuItem>
                   </>
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 h-4 w-4" />
                   Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -274,7 +299,7 @@ export function Header({ companyData }: HeaderProps) {
                 className="md:hidden"
                 aria-label="Open mobile menu"
               >
-                <Menu className="h-4 w-4" />
+                <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
@@ -287,7 +312,7 @@ export function Header({ companyData }: HeaderProps) {
                     className="pl-10"
                     aria-label="Search our website"
                   />
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 </div>
 
                 {/* Mobile Navigation */}
@@ -311,7 +336,7 @@ export function Header({ companyData }: HeaderProps) {
                       href="/contact"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Calendar className="h-4 w-4 mr-2" />
+                      <FontAwesomeIcon icon={faCalendar} className="h-4 w-4 mr-2" />
                       Book Appointment
                     </Link>
                   </Button>
@@ -320,7 +345,7 @@ export function Header({ companyData }: HeaderProps) {
                       href="/about"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <MapPin className="h-4 w-4 mr-2" />
+                      <FontAwesomeIcon icon={faMapMarkerAlt} className="h-4 w-4 mr-2" />
                       Our Presence
                     </Link>
                   </Button>

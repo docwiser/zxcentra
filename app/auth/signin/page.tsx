@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Github, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faEye, faEyeSlash, faExclamationTriangle, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -32,8 +34,8 @@ export default function SignInPage() {
         console.error('Failed to fetch company data:', error);
         // Fallback company data
         setCompany({
-          name: 'ZXCentra',
-          logo: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2'
+          name: 'Zxentra',
+          logo: '/logo.svg'
         });
       }
     };
@@ -119,7 +121,7 @@ export default function SignInPage() {
           <CardContent className="space-y-6">
             {error && (
               <div className="flex items-center space-x-2 text-destructive text-sm">
-                <AlertCircle className="h-4 w-4" />
+                <FontAwesomeIcon icon={faExclamationTriangle} className="h-4 w-4" />
                 <span>{error}</span>
               </div>
             )}
@@ -134,7 +136,7 @@ export default function SignInPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@administrator.serve"
+                  placeholder="john@example.com"
                   required
                   disabled={isLoading}
                 />
@@ -150,7 +152,7 @@ export default function SignInPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Admin@1122"
+                    placeholder="Enter your password"
                     required
                     disabled={isLoading}
                   />
@@ -161,7 +163,7 @@ export default function SignInPage() {
                     className="absolute right-0 top-0 h-full px-3"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -188,7 +190,7 @@ export default function SignInPage() {
                 onClick={() => handleSocialSignIn('github')}
                 disabled={isLoading}
               >
-                <Github className="h-4 w-4 mr-2" />
+                <FontAwesomeIcon icon={faGithub} className="h-4 w-4 mr-2" />
                 GitHub
               </Button>
               <Button
@@ -196,7 +198,7 @@ export default function SignInPage() {
                 onClick={() => handleSocialSignIn('google')}
                 disabled={isLoading}
               >
-                <Mail className="h-4 w-4 mr-2" />
+                <FontAwesomeIcon icon={faGoogle} className="h-4 w-4 mr-2" />
                 Google
               </Button>
             </div>
@@ -206,12 +208,6 @@ export default function SignInPage() {
               <Link href="/auth/signup" className="text-primary hover:underline">
                 Sign up
               </Link>
-            </div>
-
-            <div className="text-center text-xs text-muted-foreground">
-              <p>Demo credentials:</p>
-              <p>Email: admin@administrator.serve</p>
-              <p>Password: Admin@1122</p>
             </div>
           </CardContent>
         </Card>

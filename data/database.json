@@ -4,15 +4,15 @@
       "id": 1,
       "email": "admin@administrator.serve",
       "name": "Administrator",
-      "password": "$2a$12$uE8uowWkSplR9FoMBKd39e6mM8ji.r8pNiGAE/EiHE6GCUfDXkMsW",
+      "password": "$2a$12$BXgfDwTeSSYzPKl8Ao3Ngu8H10A1.1dRW8vPMwptURZIYxYONPVvu",
       "role": "admin",
       "permissions": [
         "*"
       ],
       "social_logins": [],
       "avatar": null,
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "company_settings": [
@@ -21,7 +21,7 @@
       "name": "Zxentra",
       "tagline": "Innovating Tomorrow's Technology Today",
       "description": "Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.",
-      "logo": "https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2",
+      "logo": "/logo.svg",
       "website": "https://zxentra.com",
       "email": "contact@zxentra.com",
       "phone": "+91 8237308228",
@@ -36,7 +36,7 @@
       "social_instagram": "https://instagram.com/zxentra",
       "social_youtube": "https://youtube.com/c/zxentra",
       "founded": "2025",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "products": [
@@ -56,8 +56,8 @@
       "price": "$99/month",
       "category": "Cloud Solutions",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
@@ -75,8 +75,8 @@
       "price": "$149/month",
       "category": "Analytics",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
@@ -94,8 +94,8 @@
       "price": "$199/month",
       "category": "Security",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "services": [
@@ -112,8 +112,8 @@
       ],
       "category": "Development",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
@@ -128,8 +128,8 @@
       ],
       "category": "Mobile",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
@@ -144,8 +144,8 @@
       ],
       "category": "Software",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 4,
@@ -160,8 +160,8 @@
       ],
       "category": "Automation",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 5,
@@ -176,8 +176,8 @@
       ],
       "category": "Security",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 6,
@@ -192,8 +192,8 @@
       ],
       "category": "Cloud",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 7,
@@ -208,8 +208,8 @@
       ],
       "category": "AI/ML",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 8,
@@ -224,8 +224,8 @@
       ],
       "category": "Infrastructure",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 9,
@@ -240,8 +240,8 @@
       ],
       "category": "Design",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 10,
@@ -256,8 +256,8 @@
       ],
       "category": "Gaming",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 11,
@@ -272,8 +272,8 @@
       ],
       "category": "Backend",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "blog_categories": [
@@ -282,28 +282,28 @@
       "name": "Cloud Computing",
       "slug": "cloud-computing",
       "description": "Latest trends and insights in cloud technology",
-      "created_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
       "name": "Cybersecurity",
       "slug": "cybersecurity",
       "description": "Security best practices and threat intelligence",
-      "created_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
       "name": "Digital Transformation",
       "slug": "digital-transformation",
       "description": "Strategies for successful digital transformation",
-      "created_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 4,
       "name": "AI & Machine Learning",
       "slug": "ai-machine-learning",
       "description": "Artificial intelligence and machine learning insights",
-      "created_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "blog_posts": [
@@ -324,8 +324,8 @@
       ],
       "status": "published",
       "read_time": "5 min read",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
@@ -343,8 +343,8 @@
       ],
       "status": "published",
       "read_time": "7 min read",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
@@ -362,8 +362,8 @@
       ],
       "status": "published",
       "read_time": "6 min read",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "email_settings": [],
@@ -378,8 +378,8 @@
       "rating": 5,
       "image": "https://images.pexels.com/photos/3184344/pexels-photo-3184344.jpeg?auto=compress&cs=tinysrgb&w=300",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
@@ -390,8 +390,8 @@
       "rating": 5,
       "image": "https://images.pexels.com/photos/3184398/pexels-photo-3184398.jpeg?auto=compress&cs=tinysrgb&w=300",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
@@ -402,8 +402,8 @@
       "rating": 5,
       "image": "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=300",
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ],
   "faqs": [
@@ -414,8 +414,8 @@
       "category": "General",
       "order": 1,
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 2,
@@ -424,8 +424,8 @@
       "category": "Projects",
       "order": 2,
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 3,
@@ -434,8 +434,8 @@
       "category": "Support",
       "order": 3,
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 4,
@@ -444,8 +444,8 @@
       "category": "Technical",
       "order": 4,
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     },
     {
       "id": 5,
@@ -454,8 +454,8 @@
       "category": "Quality",
       "order": 5,
       "status": "active",
-      "created_at": "2025-06-27T00:10:47.316Z",
-      "updated_at": "2025-06-27T00:10:47.316Z"
+      "created_at": "2025-06-29T07:37:08.034Z",
+      "updated_at": "2025-06-29T07:37:08.034Z"
     }
   ]
 }

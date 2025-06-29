@@ -36,7 +36,7 @@ async function seed() {
           name: 'Zxentra',
           tagline: 'Innovating Tomorrow\'s Technology Today',
           description: 'Leading provider of cutting-edge software solutions and digital transformation services for businesses worldwide.',
-          logo: 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+          logo: '/logo.svg',
           website: 'https://zxentra.com',
           email: 'contact@zxentra.com',
           phone: '+91 8237308228',
